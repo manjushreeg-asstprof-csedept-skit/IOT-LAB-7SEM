@@ -1,0 +1,113 @@
+Experiment 4:  Develop a program to control a DC motor with Arduino board
+
+Algorithm
+1.	Start. 
+2.	Initialize motor control pins (IN1 and IN2). 
+3.	Configure the pins as OUTPUT. 
+4.	Rotate the motor clockwise. 
+5.	Wait for 3 seconds. 
+6.	Stop the motor. 
+7.	Wait for 1 second. 
+8.	Rotate the motor anticlockwise. 
+9.	Wait for 3 seconds. 
+10.	Stop the motor. 
+11.	Repeat the process continuously.
+
+Line-by-Line Program Explanation
+const int IN1 = 8;          // Connect motor driver IN1 to Arduino Pin 8.
+
+const int IN2 = 9;          // Connect motor driver IN2 to Arduino Pin 9.
+
+pinMode(IN1, OUTPUT);       // Configure IN1 as output.
+
+pinMode(IN2, OUTPUT);       // Configure IN2 as output.
+
+digitalWrite(IN1, HIGH);    // IN1 HIGH
+
+digitalWrite(IN2, LOW);     // IN2 LOW
+                             // Motor rotates clockwise.
+
+delay(3000);                // Run motor for 3 seconds.
+
+digitalWrite(IN1, LOW);     // Stop motor.
+
+digitalWrite(IN2, LOW);
+
+delay(1000);                // Wait for 1 second.
+
+digitalWrite(IN1, LOW);     // IN1 LOW
+
+digitalWrite(IN2, HIGH);    // IN2 HIGH
+                             // Motor rotates anticlockwise.
+
+delay(3000);                // Run motor for 3 seconds.
+
+digitalWrite(IN1, LOW);     // Stop motor.
+
+digitalWrite(IN2, LOW);
+
+delay(1000);                // Wait for 1 second.
+
+loop();                     // The sequence repeats automatically.
+Working
+•	The Arduino sends control signals to the L293D motor driver. 
+•	When IN1 = HIGH and IN2 = LOW, the motor rotates clockwise. 
+•	When both inputs are LOW, the motor stops. 
+•	When IN1 = LOW and IN2 = HIGH, the motor rotates anticlockwise. 
+•	The sequence repeats continuously. 
+________________________________________
+Applications
+•	Robotics 
+•	Conveyor belt systems 
+•	Automatic doors 
+•	Electric vehicles 
+•	Industrial automation 
+•	Smart irrigation systems 
+•	Home automation 
+________________________________________
+Viva Questions with Answers
+1. What is a DC motor?
+Answer: A DC motor converts electrical energy into mechanical rotational motion.
+________________________________________
+2. Why is a motor driver required?
+Answer: The Arduino cannot supply enough current to drive a motor directly, so a motor driver such as the L293D is used.
+________________________________________
+3. Which motor driver is used in this experiment?
+Answer: L293D Motor Driver IC/Module.
+________________________________________
+4. Why can't a DC motor be connected directly to the Arduino?
+Answer: A DC motor requires more current than the Arduino output pins can safely provide.
+________________________________________
+5. What is the function of the L293D motor driver?
+Answer: It controls the direction of rotation and supplies sufficient current to the motor.
+________________________________________
+6. Which Arduino pins control the motor?
+Answer: Digital Pins 8 and 9.
+________________________________________
+7. How is clockwise rotation achieved?
+Answer: By setting IN1 = HIGH and IN2 = LOW.
+________________________________________
+8. How is anticlockwise rotation achieved?
+Answer: By setting IN1 = LOW and IN2 = HIGH.
+________________________________________
+9. How do you stop the motor?
+Answer: Set both IN1 and IN2 to LOW.
+________________________________________
+10. What is the purpose of pinMode()?
+Answer: It configures Arduino pins as INPUT or OUTPUT.
+________________________________________
+11. What is the purpose of digitalWrite()?
+Answer: It sets a digital output pin to HIGH or LOW.
+________________________________________
+12. What is the function of delay()?
+Answer: It pauses program execution for the specified time in milliseconds.
+________________________________________
+13. Can the motor speed be controlled?
+Answer: Yes. Motor speed can be controlled using PWM with the analogWrite() function on PWM pins.
+________________________________________
+14. Mention four applications of DC motors.
+Answer: Robotics, electric vehicles, conveyor belts, and water pumps.
+________________________________________
+15. What is the result of this experiment?
+Answer: The Arduino successfully controlled the DC motor by rotating it clockwise, stopping it, rotating it anticlockwise, and stopping it repeatedly.
+
