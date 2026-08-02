@@ -1,0 +1,95 @@
+Experiment 1: Develop a program to blink 5 LEDs back and forth
+Logic (Algorithm)
+Step 1:Define the total number of LEDs and store their Arduino pin numbers in an array.
+Step 2:Set all LED pins as OUTPUT using the setup() function.
+Step 3:Inside the loop() function, execute a forward loop to glow LEDs from Pin 2 to Pin 6 one by one.
+Step 4:After each LED glows for 500 ms, switch it OFF before turning ON the next LED.
+Step 5:Execute a backward loop to glow LEDs from Pin 5 (LED4) to Pin 3 (LED2) one by one.
+Step 6:Repeat the entire process continuously to create a running LED (Knight Rider) effect.
+Program Flow
+START
+  │
+  ▼
+Initialize LED Pins
+  │
+  ▼
+Configure Pins as OUTPUT
+  │
+  ▼
+Forward LED Sequence
+(LED1 → LED2 → LED3 → LED4 → LED5)
+  │
+  ▼
+Backward LED Sequence
+(LED4 → LED3 → LED2)
+  │
+  ▼
+Repeat Forever
+  ▲
+  └───────────────
+ 
+PROGRAM-CODE
+// Define a constant to represent the total number of LEDs
+#define numOfLed 5
+
+// Create an array to store the Arduino pin numbers
+// where the LEDs are connected (Pins 2, 3, 4, 5, and 6)
+int ledPin[numOfLed] = {2, 3, 4, 5, 6};
+
+// Define the delay time (500 milliseconds)
+int wait = 500;
+
+// The setup() function runs only once when the Arduino is powered ON or reset
+void setup()
+{
+    // Use a for loop to configure all LED pins as OUTPUT
+    for (int i = 0; i < numOfLed; i++)
+    {
+        pinMode(ledPin[i], OUTPUT);   // Set each LED pin as an output
+    }
+}
+
+// The loop() function runs continuously
+void loop()
+{
+    // ---------------- FORWARD DIRECTION ----------------
+
+    // Turn ON LEDs one by one from LED1 to LED5
+    for (int i = 0; i < numOfLed; i++)
+    {
+        digitalWrite(ledPin[i], HIGH); // Turn ON the current LED
+        delay(wait);                   // Wait for 500 milliseconds
+        digitalWrite(ledPin[i], LOW);  // Turn OFF the current LED
+    }
+
+    // ---------------- BACKWARD DIRECTION ----------------
+
+    // Turn ON LEDs in reverse order from LED4 to LED2
+    // (LED5 and LED1 are skipped to avoid repeating them)
+    for (int i = numOfLed - 2; i > 0; i--)
+    {
+        digitalWrite(ledPin[i], HIGH); // Turn ON the current LED
+        delay(wait);                   // Wait for 500 milliseconds
+        digitalWrite(ledPin[i], LOW);  // Turn OFF the current LED
+    }
+}
+
+Viva Questions
+Q1. Which programming language is used in Arduino?
+Answer: Arduino uses C++ (Arduino C++).
+Q2. Why is an array used in this program?
+Answer: The array stores the LED pin numbers, making it easy to control multiple LEDs using loops instead of writing separate code for each LED.
+Q3. Why is a for loop used?
+Answer: The for loop reduces code repetition and sequentially controls all the LEDs.
+Q4. What is the purpose of delay(500)?
+Answer: It pauses the program for 500 milliseconds, allowing each LED to remain ON for half a second.
+Q5. Why does the backward loop start from numOfLed - 2?
+Answer: It starts from LED4 (index 3) instead of LED5 to prevent LED5 from glowing twice consecutively, creating a smooth back-and-forth animation.
+
+Can we change the pin numbers?
+Yes. The Arduino Uno has 14 digital I/O pins (0–13), and most of them can be used to connect LEDs.
+For example, if you want to use pins 7, 8, 9, 10, and 11 instead of 2, 3, 4, 5, and 6, simply change:
+int ledPin[numOfLed] = {2, 3, 4, 5, 6};
+to
+int ledPin[numOfLed] = {7, 8, 9, 10, 11};
+Then connect the LEDs to pins 7–11.
