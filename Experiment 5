@@ -1,0 +1,116 @@
+
+Experiment 5:Develop a program to deploy smart street light system using LDR sensor
+Algorithm
+1.	Start. 
+2.	Initialize the LDR and LED pins. 
+3.	Configure the LED pin as OUTPUT. 
+4.	Read the light intensity from the LDR sensor. 
+5.	Compare the LDR value with the threshold (500). 
+6.	If the light intensity is below the threshold, turn the LED ON. 
+7.	Otherwise, turn the LED OFF. 
+8.	Repeat the process continuously. 
+Line-by-Line Program Explanation
+const int ldrPin = A0;          // Connect LDR output to Analog Pin A0.
+
+const int ledPin = 8;           // LED connected to Digital Pin 8.
+
+int ldrValue;                   // Variable to store LDR value.
+
+pinMode(ledPin, OUTPUT);        // Configure LED pin as OUTPUT.
+
+Serial.begin(9600);             // Start Serial Monitor.
+
+ldrValue = analogRead(ldrPin);  // Read light intensity.
+
+Serial.println(ldrValue);       // Display LDR value on Serial Monitor.
+
+if(ldrValue < 500)              // Check if it is dark.
+{
+    digitalWrite(ledPin, HIGH); // Turn ON street light.
+}
+else
+{
+    digitalWrite(ledPin, LOW);  // Turn OFF street light.
+}
+
+delay(200);                     // Wait for 200 milliseconds.
+
+
+Working
+•	The LDR sensor continuously measures the ambient light intensity. 
+•	During daylight, the LDR value is high, so the LED (street light) remains OFF. 
+•	During darkness or low light, the LDR value falls below the threshold (500), causing the Arduino to turn the LED ON. 
+•	The process repeats continuously, providing automatic street light control. 
+________________________________________
+Applications
+•	Smart street lighting 
+•	Highway lighting 
+•	Parking area lighting 
+•	Garden lighting 
+•	Campus street lights 
+•	Smart city projects 
+•	Energy-saving lighting systems 
+________________________________________
+Viva Questions with Answers
+1. What is an LDR?
+Answer:
+An LDR (Light Dependent Resistor) is a light-sensitive resistor whose resistance changes according to the intensity of light.
+________________________________________
+2. What is the full form of LDR?
+Answer:
+Light Dependent Resistor.
+________________________________________
+3. What is the working principle of an LDR?
+Answer:
+The resistance of an LDR decreases as the intensity of light increases and increases when the light intensity decreases.
+________________________________________
+4. Which Arduino pin is connected to the LDR?
+Answer:
+Analog Pin A0.
+________________________________________
+5. Which Arduino pin is connected to the LED?
+Answer:
+Digital Pin 8.
+________________________________________
+6. Which Arduino function is used to read the LDR value?
+Answer:
+analogRead().
+________________________________________
+7. What is the range of values returned by analogRead()?
+Answer:
+0 to 1023.
+________________________________________
+8. Why is Analog Pin A0 used?
+Answer:
+Because the LDR provides an analog voltage that varies with light intensity.
+________________________________________
+9. What is the threshold value used in this experiment?
+Answer:
+500.
+________________________________________
+10. When does the LED turn ON?
+Answer:
+When the LDR value is less than 500, indicating low light or darkness.
+________________________________________
+11. What happens during daylight?
+Answer:
+The LDR value is high, and the LED remains OFF.
+________________________________________
+12. Why is a 220 Ω resistor used with the LED?
+Answer:
+To limit the current through the LED and prevent it from burning out.
+________________________________________
+13. What is the purpose of Serial.begin(9600)?
+Answer:
+It initializes serial communication at a baud rate of 9600 bps for monitoring sensor values.
+________________________________________
+14. Mention four applications of an LDR.
+Answer:
+•	Automatic street lighting 
+•	Camera light meters 
+•	Solar garden lights 
+•	Smart home lighting systems 
+________________________________________
+15. What is the result of this experiment?
+Answer:
+The Arduino successfully controlled the street light automatically. The LED turned ON in low-light conditions and OFF in bright-light conditions using the LDR sensor.
