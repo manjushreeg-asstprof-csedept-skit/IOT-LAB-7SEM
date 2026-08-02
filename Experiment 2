@@ -1,0 +1,158 @@
+Experiment 2: Develop a program to interface a relay with Arduino
+Board
+
+Algorithm: Interfacing a Relay with Arduino UNO
+1.	Start the program. 
+2.	Declare the relay control pin (Digital Pin 7). 
+3.	Initialize the relay pin as an OUTPUT using the pinMode() function. 
+4.	Set the relay to the OFF state by writing LOW to the relay pin. 
+5.	Turn ON the relay by writing HIGH to the relay pin. 
+6.	Wait for 2 seconds using the delay(2000) function. 
+7.	Turn OFF the relay by writing LOW to the relay pin. 
+8.	Wait for 2 seconds using the delay(2000) function. 
+9.	Repeat Steps 5–8 continuously to switch the relay ON and OFF. 
+10.	End (The program runs continuously inside the loop() function, so it does not terminate.)
+Working Principle
+1.	Arduino supplies a control signal to the relay module through Digital Pin 7. 
+2.	When the output is HIGH, the relay coil is energized. 
+3.	The relay switch closes the Normally Open (NO) contact. 
+4.	The connected load receives power and turns ON. 
+5.	After 2 seconds, Arduino outputs LOW. 
+6.	The relay coil is de-energized. 
+7.	The switch opens, disconnecting the load. 
+8.	The ON–OFF cycle repeats continuously.
+Arduino Program with Line-by-Line Explanation
+// Relay Interfacing with Arduino UNO
+
+const int relayPin = 7;          // Declare Digital Pin 7 as the relay control pin.
+
+void setup()
+{
+    pinMode(relayPin, OUTPUT);   // Configure relay pin as an OUTPUT pin.
+
+    digitalWrite(relayPin, LOW); // Initially keep the relay OFF.
+                                 // LOW de-energizes the relay coil.
+}
+
+void loop()
+{
+    digitalWrite(relayPin, HIGH); // Send HIGH (5V) to the relay module.
+                                  // Relay is energized and the connected load turns ON.
+
+    delay(2000);                  // Keep the relay ON for 2 seconds.
+
+    digitalWrite(relayPin, LOW);  // Send LOW (0V) to the relay module.
+                                  // Relay is de-energized and the connected load turns OFF.
+
+    delay(2000);                  // Keep the relay OFF for 2 seconds before repeating.
+
+}                                 // End of loop(). The Arduino automatically executes
+                                  // loop() repeatedly, so the relay keeps switching
+                                  // ON and OFF continuously.
+
+Expected Output
+•	The relay clicks ON for 2 seconds. 
+•	The relay clicks OFF for 2 seconds. 
+•	If a load (LED or bulb) is connected through the relay, it will blink ON and OFF every 2 seconds. 
+________________________________________
+Applications
+•	Home automation systems 
+•	Smart lighting control 
+•	Motor control 
+•	Industrial automation 
+•	Smart irrigation systems 
+•	IoT-based appliance switching 
+•	Security and alarm systems
+Viva Questions with Answers – Relay Interfacing with Arduino UNO
+1. What is a relay?
+Answer:
+A relay is an electrically operated switch that allows a low-voltage circuit (Arduino) to control a high-voltage or high-current device while providing electrical isolation.
+________________________________________
+2. Why is a relay used with Arduino?
+Answer:
+A relay is used to control AC or high-power DC appliances such as bulbs, fans, motors, and pumps using the low-voltage digital output of the Arduino.
+________________________________________
+3. What are the main terminals of a relay module?
+Answer:
+•	VCC – Power supply (5V) 
+•	GND – Ground 
+•	IN – Control input from Arduino 
+•	COM – Common terminal 
+•	NO – Normally Open contact 
+•	NC – Normally Closed contact 
+________________________________________
+4. What is the difference between NO and NC contacts?
+Answer:
+NO (Normally Open)	NC (Normally Closed)
+Open when relay is OFF	Closed when relay is OFF
+Closes when relay is ON	Opens when relay is ON
+________________________________________
+5. Which Arduino pin is used in this experiment?
+Answer:
+Digital Pin 7 is used to control the relay.
+________________________________________
+6. What is the purpose of pinMode()?
+Answer:
+pinMode() configures an Arduino pin as either INPUT or OUTPUT.
+________________________________________
+7. What happens when digitalWrite(relayPin, HIGH) is executed?
+Answer:
+The relay coil is energized, the relay switches its contacts, and the connected load turns ON.
+________________________________________
+8. What happens when digitalWrite(relayPin, LOW) is executed?
+Answer:
+The relay coil is de-energized, the contacts return to their normal position, and the connected load turns OFF.
+________________________________________
+9. What is the function of delay(2000)?
+Answer:
+It pauses the program execution for 2000 milliseconds (2 seconds).
+________________________________________
+10. Why is electrical isolation important in relay modules?
+Answer:
+Electrical isolation protects the Arduino and the user from high-voltage circuits by separating the control circuit from the load circuit.
+________________________________________
+11. Can Arduino directly control a 230V AC bulb?
+Answer:
+No. Arduino operates at 5V and cannot directly control 230V AC. A relay module is required to safely switch the AC load.
+________________________________________
+12. What is the operating voltage of an Arduino UNO?
+Answer:
+The Arduino UNO operates at 5V.
+________________________________________
+13. Why is a relay module preferred over a bare relay?
+Answer:
+A relay module includes a transistor driver, flyback diode, and often an optocoupler, making it easier and safer to interface with Arduino.
+________________________________________
+14. What is the purpose of the flyback diode in a relay module?
+Answer:
+The flyback diode protects the Arduino and driver circuit from the high reverse voltage (back EMF) generated when the relay coil is switched OFF.
+________________________________________
+15. Mention some applications of relay interfacing.
+Answer:
+•	Home automation 
+•	Smart lighting systems 
+•	Motor and pump control 
+•	Industrial automation 
+•	Smart irrigation 
+•	IoT-based appliance control 
+•	Security and alarm systems 
+________________________________________
+16. Why does the relay make a clicking sound?
+Answer:
+The clicking sound is produced when the relay's internal electromagnetic switch moves between the ON and OFF positions.
+________________________________________
+17. What is the function of the loop() function in Arduino?
+Answer:
+The loop() function executes repeatedly after the setup() function, allowing continuous operation of the program.
+________________________________________
+18. What is the purpose of the setup() function?
+Answer:
+The setup() function runs only once when the Arduino is powered ON or reset. It is used to initialize pins and configure hardware.
+________________________________________
+19. Can a relay control both AC and DC loads?
+Answer:
+Yes. Depending on its ratings, a relay can switch both AC and DC loads.
+________________________________________
+20. What is the result of this experiment?
+Answer:
+The Arduino successfully interfaces with the relay module and controls the connected load by switching it ON and OFF at regular intervals.
