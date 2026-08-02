@@ -1,0 +1,148 @@
+Experiment 3: Develop a program to deploy an intrusion detection system using Ultrasonic and sound sensors
+Algorithm
+1.	Start. 
+2.	Initialize ultrasonic sensor, sound sensor, and buzzer pins. 
+3.	Configure the sensor pins and buzzer. 
+4.	Measure the distance using the ultrasonic sensor. 
+5.	Read the sound sensor output. 
+6.	If distance < 20 cm OR sound is detected, turn ON the buzzer. 
+7.	Otherwise, turn OFF the buzzer. 
+8.	Repeat the process continuously. 
+Line-by-Line Program Explanation
+const int trigPin = 9;      // Trigger pin of ultrasonic sensor
+const int echoPin = 10;     // Echo pin of ultrasonic sensor
+const int soundPin = 2;     // Digital output of sound sensor
+const int buzzer = 8;       // Buzzer connected to pin 8
+
+long duration;              // Stores echo travel time
+int distance;               // Stores measured distance
+
+pinMode(trigPin, OUTPUT);   // Configure trigger as output
+pinMode(echoPin, INPUT);    // Configure echo as input
+pinMode(soundPin, INPUT);   // Configure sound sensor as input
+pinMode(buzzer, OUTPUT);    // Configure buzzer as output
+
+Serial.begin(9600);         // Start serial communication
+
+digitalWrite(trigPin, LOW); // Clear trigger pin
+delayMicroseconds(2);       // Wait for 2 microseconds
+
+digitalWrite(trigPin, HIGH);// Send ultrasonic pulse
+delayMicroseconds(10);      // Pulse duration
+digitalWrite(trigPin, LOW); // Stop pulse
+
+duration = pulseIn(echoPin, HIGH);   // Measure echo return time
+
+distance = duration * 0.034 / 2;     // Calculate distance in cm
+
+int sound = digitalRead(soundPin);   // Read sound sensor output
+
+if(distance < 20 || sound == HIGH)   // Check intrusion condition
+{
+    digitalWrite(buzzer, HIGH);      // Activate buzzer
+}
+else
+{
+    digitalWrite(buzzer, LOW);       // Deactivate buzzer
+}
+
+Working
+•	The ultrasonic sensor continuously measures the distance to detect nearby objects. 
+•	The sound sensor detects loud sounds such as claps or footsteps. 
+•	If an object is detected within 20 cm or the sound sensor detects a sound, the Arduino activates the buzzer. 
+•	If neither condition is true, the buzzer remains OFF. 
+•	The monitoring process repeats continuously, providing a simple intrusion detection system. 
+________________________________________
+Applications
+•	Home security systems 
+•	Office intrusion detection 
+•	Smart door monitoring 
+•	Museum and exhibit protection 
+•	Warehouse security 
+•	IoT-based surveillance systems
+Viva Questions with Answers – Intrusion Detection System Using Ultrasonic and Sound Sensors
+1. What is an Intrusion Detection System (IDS)?
+Answer:
+An Intrusion Detection System (IDS) is a security system that detects unauthorized entry or suspicious activity and generates an alarm.
+________________________________________
+2. Which sensor is used to measure distance in this project?
+Answer:
+The HC-SR04 Ultrasonic Sensor is used to measure the distance between the sensor and an object.
+________________________________________
+3. What is the working principle of the ultrasonic sensor?
+Answer:
+The ultrasonic sensor transmits ultrasonic waves and measures the time taken for the echo to return after reflecting from an object. Using this time, the distance is calculated.
+________________________________________
+4. What is the function of the Trigger (Trig) pin?
+Answer:
+The Trigger pin sends a 10 µs pulse to generate ultrasonic waves.
+________________________________________
+5. What is the function of the Echo pin?
+Answer:
+The Echo pin receives the reflected ultrasonic waves and provides the pulse duration to the Arduino.
+________________________________________
+6. Which Arduino function is used to measure the echo pulse duration?
+Answer:
+The pulseIn() function is used to measure the duration of the echo pulse.
+________________________________________
+7. How is the distance calculated in the program?
+Answer:
+Distance=Duration×0.0342\text{Distance}=\frac{\text{Duration} \times 0.034}{2}Distance=2Duration×0.034 
+where 0.034 cm/µs is the speed of sound.
+________________________________________
+8. What is the purpose of the sound sensor?
+Answer:
+The sound sensor detects loud sounds such as claps, knocks, or footsteps.
+________________________________________
+9. Which Arduino pin is connected to the sound sensor?
+Answer:
+Digital Pin 2 is connected to the sound sensor.
+________________________________________
+10. Which Arduino pin is connected to the buzzer?
+Answer:
+Digital Pin 8 is connected to the buzzer.
+________________________________________
+11. Under what condition does the buzzer turn ON?
+Answer:
+The buzzer turns ON when:
+•	The measured distance is less than 20 cm, or 
+•	The sound sensor detects a sound. 
+________________________________________
+12. What is the purpose of Serial.begin(9600)?
+Answer:
+It initializes serial communication between the Arduino and the Serial Monitor at a baud rate of 9600 bps.
+________________________________________
+13. What is the function of digitalRead()?
+Answer:
+digitalRead() reads the digital state (HIGH or LOW) of an input pin.
+________________________________________
+14. What is the function of digitalWrite()?
+Answer:
+digitalWrite() sets a digital output pin to HIGH or LOW.
+________________________________________
+15. Why is delayMicroseconds(10) used?
+Answer:
+It sends a 10-microsecond trigger pulse required for the HC-SR04 ultrasonic sensor to transmit ultrasonic waves.
+________________________________________
+16. Why is the distance divided by 2 in the formula?
+Answer:
+Because the measured time includes the travel of the ultrasonic wave to the object and back, dividing by 2 gives the one-way distance.
+________________________________________
+17. What happens if no intrusion is detected?
+Answer:
+The buzzer remains OFF, and the Arduino continues monitoring the sensors.
+________________________________________
+18. Can this project be used for home security?
+Answer:
+Yes. It can detect nearby objects or unusual sounds and generate an alarm, making it suitable for basic home security applications.
+________________________________________
+19. Mention any four applications of this project.
+Answer:
+•	Home security systems 
+•	Office intrusion detection 
+•	Warehouse monitoring 
+•	Smart door security 
+________________________________________
+20. What is the result of this experiment?
+Answer:
+The Arduino successfully monitored the ultrasonic and sound sensors. Whenever an object was detected within 20 cm or a loud sound was sensed, the buzzer was activated, demonstrati
