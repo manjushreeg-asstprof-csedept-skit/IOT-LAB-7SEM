@@ -1,0 +1,75 @@
+Experiment 8: Develop a program to detect the gas leakage in the surrounding environment.
+
+AIM: To develop and implement a program that detects the presence of gas leakage in the surrounding environment using sensor readings and generates an alert when the gas concentration exceeds a predefined safety threshold.
+
+COMPONENTS:
+
+
+Sl. No.	Quantity	Component
+1	1	Arduino Uno R3
+2	1	USB Cable
+3	5	Jumper Wires
+4	1	MQ-5 Gas Sensor
+5	1	Buzzer
+
+CIRCUIT DIAGRAM:
+
+ 
+
+
+Gas Sensor	Arduino
+A0	A0
+GND	GND
+VCC	5V
+
+Buzzer	Arduino
++	D8
+-	GND
+ 
+
+SETUP:
+
+a) Connect the MQ-5 Gas Sensor to the Arduino Uno as per the circuit diagram (A0 → A0, VCC → 5V, GND → GND).
+b) Connect the Buzzer to the Arduino Uno (Positive → D8, Negative → GND). c) Connect the Arduino Uno to the computer using a USB cable.
+d) Open the Arduino IDE, then go to Tools → Board and select Arduino Uno. e) In Tools → Port, select the COM port of the connected Arduino Uno.
+f) Type the program into the Arduino IDE and upload it.
+g) Open the Serial Monitor (baud rate 9600) to observe sensor readings and alerts when gas concentration exceeds the threshold.
+
+CODE:
+
+// Gas Sensor (MQ-5) with Buzzer Program
+
+const int gasSensorPin = A0; // Analog pin for MQ-5 sensor const int buzzerPin = 8; // Digital pin for buzzer
+const int threshold = 500; // Threshold for buzzer and alert void setup() {
+pinMode(buzzerPin, OUTPUT); Serial.begin(9600);
+}
+
+void loop() {
+
+int sensorValue = analogRead(gasSensorPin);
+
+// Print sensor value Serial.print("Gas Sensor Value: "); Serial.println(sensorValue);
+// If smoke value > 500 => Alert + buzzer ON
+
+if (sensorValue > threshold) {
+
+Serial.println("ALERT: Smoke detected! Buzzer ON!");
+
+digitalWrite(buzzerPin, HIGH);
+
+} else {
+ 
+
+Serial.println("Safe: Smoke level normal.");
+
+digitalWrite(buzzerPin, LOW);
+
+} delay(200); RESULT:
+The Arduino Uno successfully detected gas leakage using the MQ-5 sensor.
+
+When the gas concentration was below the threshold (500), the Serial Monitor displayed
+“Safe: Gas level normal.” and the buzzer remained OFF.
+
+When the gas concentration exceeded the threshold, the Serial Monitor displayed “ALERT: Gas leakage detected! Buzzer ON!” and the buzzer turned ON, giving an audible warning.
+
+Thus, the experiment was successfully implemented to detect gas leakage and generate an alert both through the Serial Monitor and a buzzer.
