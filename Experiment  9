@@ -1,0 +1,80 @@
+Experiment  9:  Develop  a  program  to  demonstrate  weather  station readings using Arduino
+
+
+
+AIM:  To  design  and  implement  an  Arduino-based  weather  station  that measures and displays temperature and humidity in real time.
+
+
+
+COMPONENTS:
+
+Sl. No.	
+Quantity	
+Component
+1	1	Arduino Uno R3
+2	1	USB Cable
+3	3	Jumper Wire
+4	1	DHT22 Sensor
+
+
+ 
+CIRCUIT CONNECTIONS:
+
+
+
+DHT22 Pin	
+Arduino
+VCC(+)	5V
+GND(-)	GND
+
+Data	
+Digital Pin D2
+
+
+
+
+SETUP:
+
+a) Connect the DHT22 sensor to the Arduino Uno according to the circuit: VCC to 5V, GND to GND, and Data to digital pin D2.
+b) Connect the Arduino Uno to the computer using a USB cable.
+c) Open the Arduino IDE, go to Tools, select Board, and choose Arduino
+Uno.
+d) In Tools, select Port and choose the COM port for your Arduino.
+ 
+
+e) Install the DHT sensor library by Adafruit if it is not already installed. f) Type the program into the Arduino IDE and upload it to the Arduino.
+g) Open the Serial Monitor to see the temperature and humidity readings from the DHT22 sensor.
+
+CODE:
+
+#include <DHT.h>
+#define DHTPIN 2
+#define DHTTYPE DHT22
+DHT dht(DHTPIN, DHTTYPE);
+
+
+void setup() { Serial.begin(9600); dht.begin();
+Serial.println("Weather Station Initialized");
+}
+
+
+void loop() {
+float temperature = dht.readTemperature(false);
+float humidity = dht.readHumidity();
+
+
+if (!isnan(temperature) && !isnan(humidity)) { Serial.print("Temperature: "); Serial.print(temperature);
+Serial.print(" °C, Humidity: "); Serial.print(humidity); Serial.println("%");
+} else {
+Serial.println("Failed to read from DHT sensor!");
+}
+
+
+delay(1000);
+}
+
+
+RESULT:
+
+
+The Arduino-based weather station using the DHT22 sensor successfully measured  and  displayed  real-time  temperature  and humidity.  The  sensor provided accurate readings, and the program correctly processed and output the data on the Serial Monitor
