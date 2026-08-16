@@ -1,0 +1,84 @@
+Experiment 10: Develop a program to setup a UART Protocol and pass a string through the protocol
+
+
+AIM: To  develop  a  program  that  configures  the  UART  protocol  and  successfully transmit a string of characters through it.
+
+COMPONENTS:	
+	Sl. No.	Quantity	Component
+	1	2	Arduino Uno R3
+	2	2	USB Cable
+	3	3	Jumper Wires
+
+
+
+CIRCUIT DIAGRAM:
+
+ 
+ 
+
+SETUP:
+
+a) Connect the two Arduino boards as per the given circuit diagram.
+b) Ensure proper TX–RX cross connection and a common GND between both Arduinos. c) Connect both Arduinos to the computer via USB cables.
+d) Open Arduino IDE, then go to Tools → Board and select Arduino Uno.
+e) In  Tools → Port, select the COM port of the first board, type the Transmitter
+program, and upload.
+f) Next, select the COM port of the second board, type the Receiver program, and upload. g) Open the Serial Monitor of the Receiver Arduino to observe the transmitted data.
+
+
+CODE:
+
+// UART Transmitter Code for Arduino UNO
+
+void setup() {
+
+// Initialize UART communication at 9600 baud rate
+
+Serial.begin(9600);
+
+}
+
+void loop() {
+
+// String to transmit
+
+String message = "Hello from Transmitter Arduino!";
+
+// Send string
+
+Serial.println(message);
+
+// Small delay before sending again delay(1000);
+}
+
+// UART Receiver Code for Arduino UNO
+
+void setup() {
+
+// Initialize UART communication at 9600 baud rate
+
+Serial.begin(9600);
+
+}
+ 
+
+
+
+void loop() {
+
+// Check if data is available if (Serial.available() > 0) {
+// Read incoming string
+
+String receivedData = Serial.readStringUntil('\n');
+
+// Print received string to Serial Monitor
+
+Serial.println("Received: " + receivedData);
+
+}
+
+}
+
+RESULT:
+
+The two Arduino Uno boards successfully communicated using UART. The transmitter board sent a string message periodically, and the receiver board correctly received and displayed the message on the Serial Monitor
