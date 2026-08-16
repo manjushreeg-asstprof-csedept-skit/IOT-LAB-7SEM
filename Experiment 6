@@ -1,0 +1,75 @@
+Experiment 6: Develop a program to classify dry and wet waste with the
+Moisture Sensor
+
+
+
+AIM: To develop a program that uses a soil moisture sensor to classify waste as dry or wet based on moisture level readings.
+
+
+
+COMPONENTS:
+
+Sl. No.	
+Quantity	
+Component
+1	1	Arduino Uno R3
+2	1	USB Cable
+3	3	Jumper Wire
+4	1	Soil moisture sensor
+
+
+
+ 
+
+
+
+CIRCUIT CONNECTIONS:
+
+
+Soil Moisture Sensor	Arduino
+VCC	5V
+GND	GND
+A0	A0
+ 
+
+SETUP:
+
+1.   Connect the soil moisture sensor to the Arduino Uno as per circuit connections.
+2.   Connect the Arduino Uno to the computer using a USB cable.
+3.   Open the Arduino IDE and navigate to:
+4.   Tools → Board → Arduino Uno
+5.   Tools → Port → Select the COM port corresponding to your Arduino device
+6.   Create a new sketch and type the provided moisture- based classification program.
+7.   Click Upload to transfer the program to the Arduino Uno board.
+8.   Open the Serial Monitor.
+9.   Insert the moisture sensor into different waste samples (dry paper, plastic, food waste, etc.).
+10. Observe the moisture value and classification message (Dry Waste or
+Wet Waste) displayed on the serial monitor.
+
+CODE:
+
+const int moisturePin = A0;
+int moistureValue = 0;
+const int threshold = 700;
+void setup()
+{ Serial.begin(9600); pinMode(moisturePin, INPUT);
+}
+void loop()
+{
+moistureValue = analogRead(moisturePin); Serial.print("Moisture Value: "); Serial.println(moistureValue);
+if (moistureValue > threshold)
+{
+Serial.println("Dry Waste Detected");
+}
+else
+{
+Serial.println("Wet Waste Detected");
+}
+delay(1000);
+}
+ 
+
+RESULT:
+
+
+The  soil  moisture  sensor  successfully  measured  the  moisture  level  of different  waste  samples.  Based  on  threshold  comparison,  the  system correctly classified waste as Dry or Wet, and the results were displayed on the Serial Monitor.
