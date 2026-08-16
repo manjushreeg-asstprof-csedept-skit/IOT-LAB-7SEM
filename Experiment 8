@@ -1,75 +1,242 @@
-Experiment 8: Develop a program to detect the gas leakage in the surrounding environment.
+## Experiment 8: Develop a program to detect gas leakage in the surrounding environment
 
-AIM: To develop and implement a program that detects the presence of gas leakage in the surrounding environment using sensor readings and generates an alert when the gas concentration exceeds a predefined safety threshold.
+### Logic (Algorithm)
 
-COMPONENTS:
+**Step 1:** Define the MQ-5 gas sensor analog pin as `A0` and the buzzer digital pin as `8`.
 
+**Step 2:** Define a threshold value of **500** for detecting an increased gas concentration.
 
-Sl. No.	Quantity	Component
-1	1	Arduino Uno R3
-2	1	USB Cable
-3	5	Jumper Wires
-4	1	MQ-5 Gas Sensor
-5	1	Buzzer
+**Step 3:** In the `setup()` function, configure the buzzer pin as an `OUTPUT` and initialize serial communication at **9600 baud rate**.
 
-CIRCUIT DIAGRAM:
+**Step 4:** Inside the `loop()` function, read the analog value from the MQ-5 gas sensor using `analogRead()`.
 
- 
+**Step 5:** Display the gas sensor value on the Serial Monitor.
 
+**Step 6:** Compare the sensor reading with the predefined threshold value of `500`.
 
-Gas Sensor	Arduino
-A0	A0
-GND	GND
-VCC	5V
+**Step 7:** If the sensor value is **greater than 500**, consider it as a gas/smoke alert, display an alert message on the Serial Monitor, and turn ON the buzzer.
 
-Buzzer	Arduino
-+	D8
--	GND
- 
+**Step 8:** If the sensor value is **500 or less**, consider the gas level to be within the selected safe range, display a normal message, and keep the buzzer OFF.
 
-SETUP:
+**Step 9:** Wait for 200 milliseconds and repeat the process continuously.
 
-a) Connect the MQ-5 Gas Sensor to the Arduino Uno as per the circuit diagram (A0 → A0, VCC → 5V, GND → GND).
-b) Connect the Buzzer to the Arduino Uno (Positive → D8, Negative → GND). c) Connect the Arduino Uno to the computer using a USB cable.
-d) Open the Arduino IDE, then go to Tools → Board and select Arduino Uno. e) In Tools → Port, select the COM port of the connected Arduino Uno.
-f) Type the program into the Arduino IDE and upload it.
-g) Open the Serial Monitor (baud rate 9600) to observe sensor readings and alerts when gas concentration exceeds the threshold.
+### Program Flow
 
-CODE:
+```text id="c2ez1r"
+                     START
+                       │
+                       ▼
+              Initialize MQ-5 Sensor
+                  and Buzzer
+                       │
+                       ▼
+              Set Buzzer Pin D8
+                  as OUTPUT
+                       │
+                       ▼
+           Start Serial Communication
+                  at 9600 Baud
+                       │
+                       ▼
+          Read MQ-5 Sensor Value
+                       │
+                       ▼
+           Display Sensor Value
+                       │
+                       ▼
+        Is Sensor Value > 500?
+               /          \
+             YES           NO
+              │             │
+              ▼             ▼
+       Gas/Smoke Alert   Safe Level
+              │             │
+              ▼             ▼
+        Buzzer ON        Buzzer OFF
+              │             │
+              └──────┬──────┘
+                     ▼
+              Wait 200 ms
+                     │
+                     ▼
+              Repeat Forever
+                     ▲
+                     └────────
+```
 
+### PROGRAM-CODE
+
+```cpp
 // Gas Sensor (MQ-5) with Buzzer Program
 
-const int gasSensorPin = A0; // Analog pin for MQ-5 sensor const int buzzerPin = 8; // Digital pin for buzzer
-const int threshold = 500; // Threshold for buzzer and alert void setup() {
-pinMode(buzzerPin, OUTPUT); Serial.begin(9600);
+// Define the analog pin connected to the MQ-5 gas sensor
+const int gasSensorPin = A0;
+
+// Define the digital pin connected to the buzzer
+const int buzzerPin = 8;
+
+// Define the threshold value for gas detection
+const int threshold = 500;
+
+void setup()
+{
+    // Configure the buzzer pin as OUTPUT
+    pinMode(buzzerPin, OUTPUT);
+
+    // Start serial communication at 9600 baud
+    Serial.begin(9600);
 }
 
-void loop() {
+void loop()
+{
+    // Read the analog value from the MQ-5 gas sensor
+    int sensorValue = analogRead(gasSensorPin);
 
-int sensorValue = analogRead(gasSensorPin);
+    // Display the sensor value on the Serial Monitor
+    Serial.print("Gas Sensor Value: ");
+    Serial.println(sensorValue);
 
-// Print sensor value Serial.print("Gas Sensor Value: "); Serial.println(sensorValue);
-// If smoke value > 500 => Alert + buzzer ON
+    // Check whether the gas sensor value exceeds the threshold
+    if (sensorValue > threshold)
+    {
+        // Display alert message
+        Serial.println("ALERT: Gas leakage detected! Buzzer ON!");
 
-if (sensorValue > threshold) {
+        // Turn ON the buzzer
+        digitalWrite(buzzerPin, HIGH);
+    }
+    else
+    {
+        // Display normal condition message
+        Serial.println("Safe: Gas level normal.");
 
-Serial.println("ALERT: Smoke detected! Buzzer ON!");
+        // Turn OFF the buzzer
+        digitalWrite(buzzerPin, LOW);
+    }
 
-digitalWrite(buzzerPin, HIGH);
+    // Wait for 200 milliseconds
+    delay(200);
+}
+```
 
-} else {
- 
+### Line-by-Line Explanation
 
-Serial.println("Safe: Smoke level normal.");
+`const int gasSensorPin = A0;` defines analog pin **A0** as the input pin connected to the MQ-5 gas sensor.
 
-digitalWrite(buzzerPin, LOW);
+`const int buzzerPin = 8;` defines digital pin **8** as the output pin connected to the buzzer.
 
-} delay(200); RESULT:
-The Arduino Uno successfully detected gas leakage using the MQ-5 sensor.
+`const int threshold = 500;` defines **500** as the selected threshold value for generating the gas alert.
 
-When the gas concentration was below the threshold (500), the Serial Monitor displayed
-“Safe: Gas level normal.” and the buzzer remained OFF.
+`pinMode(buzzerPin, OUTPUT);` configures digital pin 8 as an output so Arduino can control the buzzer.
 
-When the gas concentration exceeded the threshold, the Serial Monitor displayed “ALERT: Gas leakage detected! Buzzer ON!” and the buzzer turned ON, giving an audible warning.
+`Serial.begin(9600);` starts serial communication between the Arduino and computer at **9600 baud**.
 
-Thus, the experiment was successfully implemented to detect gas leakage and generate an alert both through the Serial Monitor and a buzzer.
+`int sensorValue = analogRead(gasSensorPin);` reads the analog output of the MQ-5 sensor. On Arduino UNO, `analogRead()` normally returns a value from **0 to 1023**.
+
+`Serial.print()` and `Serial.println()` display the gas sensor reading on the Serial Monitor.
+
+`if (sensorValue > threshold)` checks whether the sensor value has exceeded the predefined threshold of 500.
+
+`digitalWrite(buzzerPin, HIGH);` turns the buzzer ON when the threshold is exceeded.
+
+`digitalWrite(buzzerPin, LOW);` turns the buzzer OFF when the sensor reading is at or below the threshold.
+
+`delay(200);` creates a delay of **200 milliseconds** before the next sensor reading.
+
+### Viva Questions
+
+**Q1. What is the purpose of this experiment?**
+**Answer:** To detect an increase in gas concentration using an MQ-5 gas sensor and generate an alert using a buzzer.
+
+**Q2. Which gas sensor is used in this experiment?**
+**Answer:** **MQ-5 gas sensor.**
+
+**Q3. Which Arduino pin is connected to the analog output of the MQ-5 sensor?**
+**Answer:** Analog pin **A0**.
+
+**Q4. Which pin is connected to the buzzer?**
+**Answer:** Digital pin **8**.
+
+**Q5. What is the purpose of the threshold value?**
+**Answer:** It is used as a reference level to decide when the sensor reading should trigger an alert.
+
+**Q6. What is the threshold value used in this program?**
+**Answer:** **500**.
+
+**Q7. What happens when the sensor value is greater than 500?**
+**Answer:** The program displays a gas leakage alert and turns ON the buzzer.
+
+**Q8. What happens when the sensor value is 500 or less?**
+**Answer:** The program displays that the gas level is normal and keeps the buzzer OFF.
+
+**Q9. What is the purpose of `analogRead()`?**
+**Answer:** It reads the analog output of the gas sensor and converts it into a digital value from **0 to 1023** on the Arduino UNO.
+
+**Q10. Why is A0 used for the MQ-5 sensor?**
+**Answer:** The analog output of the sensor provides a variable voltage, so an analog input is used to measure the sensor reading.
+
+**Q11. Why is pin 8 configured as OUTPUT?**
+**Answer:** Because Arduino needs to send a control signal to the buzzer through pin 8.
+
+**Q12. What is the purpose of `digitalWrite(buzzerPin, HIGH)`?**
+**Answer:** It sends a HIGH signal to pin 8 and turns ON the buzzer when the module is active-HIGH.
+
+**Q13. What is the purpose of `Serial.begin(9600)`?**
+**Answer:** It starts serial communication at 9600 baud so that sensor readings and alert messages can be viewed on the Serial Monitor.
+
+**Q14. What is the range of `analogRead()` on Arduino UNO?**
+**Answer:** **0 to 1023**.
+
+**Q15. What is an MQ-5 sensor used for?**
+**Answer:** It is commonly used for detecting combustible gases such as LPG, methane and similar gases. Its response also depends on the specific environment and sensor conditions.
+
+**Q16. Why is a buzzer used?**
+**Answer:** The buzzer provides an audible warning when the sensor reading exceeds the selected threshold.
+
+**Q17. Can the threshold value of 500 be changed?**
+**Answer:** Yes. The threshold should be calibrated experimentally according to the sensor, environment and application.
+
+**Q18. Why does the MQ-5 sensor require warm-up time?**
+**Answer:** The sensor contains a heated sensing element, and its output needs time to stabilize before reliable measurements can be obtained.
+
+**Q19. What is the difference between a sensor and an actuator in this experiment?**
+**Answer:** The **MQ-5 is the sensor** because it detects gas concentration, while the **buzzer is the actuator/output device** because it produces an audible alert.
+
+**Q20. What happens if the sensor reading continuously remains above the threshold?**
+**Answer:** The buzzer remains ON and the alert message continues to be displayed until the sensor reading falls to or below the threshold.
+
+### Can We Change the Threshold Value?
+
+**Yes.** The threshold depends on the sensor and the experimental environment. The current program uses:
+
+```cpp
+const int threshold = 500;
+```
+
+For example, after calibration, if a value of **600** is more suitable, it can be changed to:
+
+```cpp
+const int threshold = 600;
+```
+
+Students should not assume that **500 represents a specific gas concentration**. The MQ-5's raw analog value is not directly a gas concentration in ppm without proper calibration.
+
+### Expected Serial Monitor Output
+
+```text
+Gas Sensor Value: 320
+Safe: Gas level normal.
+
+Gas Sensor Value: 450
+Safe: Gas level normal.
+
+Gas Sensor Value: 620
+ALERT: Gas leakage detected! Buzzer ON!
+
+Gas Sensor Value: 700
+ALERT: Gas leakage detected! Buzzer ON!
+```
+
+### Important Note
+
+The threshold value **500 is only a selected experimental value** and should be calibrated for the particular MQ-5 sensor and laboratory conditions. The sensor's raw analog reading should not be directly interpreted as an exact gas concentration without appropriate calibration. For laboratory testing, use a safe and controlled method rather than deliberately exposing the sensor to a dangerous gas leak.
