@@ -1,0 +1,74 @@
+Experiment 7: Develop a program to read the pH Value of a various substances like milk, lime and water.
+
+AIM: To develop an Arduino-based system to measure and display the pH
+value of various substances such as milk, lime, and water using a pH sensor.
+
+
+
+COMPONENTS:
+
+Sl. No.	
+Quantity	
+Component
+1	1	Arduino Uno R3
+2	1	USB Cable
+3	3	Jumper Wire
+4	1	pH Sensor
+
+
+
+CIRCUIT CONNECTIONS:
+
+
+
+Ultrasonic Sensor	Arduino
+GND	GND
+V+	5V
+Po	Ao
+
+
+
+SETUP:
+
+1.   Connect the pH sensor to the Arduino Uno as per the circuit connections given.
+2.   Connect the Arduino Uno to the computer using the USB cable.
+3.   Open the Arduino IDE on your computer.
+4.   Go to: Tools → Board → Arduino Uno.
+5.   Go to: Tools → Port → and select the COM port assigned to your
+Arduino.
+6.   Create a new sketch and type the pH measurement program provided.
+7.   Click Upload to upload the sketch to the Arduino board.
+8.   Open the Serial Monitor and set the baud rate to 9600.
+9.   Immerse the pH sensor probe into different substances such as milk,
+lime juice, and water one by one.
+10. Observe the  pH values displayed on the Serial Monitor.
+ 
+
+CODE:
+
+#define SensorPin A0 float voltage, phValue;
+
+
+void setup() { Serial.begin(9600); Serial.println("Calibrating pH Sensor...");
+}
+
+
+void loop() {
+int sensorValue = analogRead(SensorPin);
+voltage = sensorValue * (5.0 / 1023.0);  // convert to voltage
+
+
+// Use your calibrated formula phValue = (-7.5 * voltage) + 17.5;
+
+
+Serial.print("Voltage: "); Serial.print(voltage); Serial.print(" V | pH: "); Serial.println(phValue);
+
+delay(1000);
+}
+
+
+RESULT:
+
+
+The  pH  measurement  system  was  successfully  implemented  using  the
+Arduino Uno and a pH sensor module.
