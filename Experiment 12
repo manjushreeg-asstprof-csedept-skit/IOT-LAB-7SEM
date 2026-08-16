@@ -1,94 +1,272 @@
-Experiment 12: Develop a  program to stimulate interfacing with the keypad module to record the keystrokes
+## Experiment 12: Develop a program to interface a keypad module to record the keystrokes
 
+### Logic (Algorithm)
 
+**Step 1:** Include the `Keypad` library required to interface the 4×4 matrix keypad with Arduino.
 
-AIM: To develop a program for interfacing a matrix keypad module with arduino to detect and record keystrokes.
+**Step 2:** Define the number of rows and columns of the keypad as **4 rows and 4 columns**.
 
- 
-COMPONENTS:
- 
+**Step 3:** Define the keypad layout using a two-dimensional character array containing the keys `0–9`, `A–D`, `*`, and `#`.
 
+**Step 4:** Define the Arduino pins connected to the four keypad rows and four keypad columns.
 
-Sl. No.     Quantity     Component
+**Step 5:** Create a Keypad object using the keypad layout, row pins, column pins, number of rows, and number of columns.
 
-1              1                   Arduino Uno R3
+**Step 6:** In the `setup()` function, initialize serial communication at **9600 baud rate**.
 
-2              1                  USB Cable
+**Step 7:** Inside the `loop()` function, continuously check whether a key has been pressed using `getKey()`.
 
-3              1                  4 x 4 Matrix Keypad
+**Step 8:** If a key is pressed, `getKey()` returns the corresponding character.
 
-4              8                  Jumper Wires
- 
+**Step 9:** Check whether the returned value is different from `NO_KEY`.
 
+**Step 10:** If a valid key is detected, display the pressed key on the Serial Monitor. The process continues continuously to record every keystroke.
 
+### Program Flow
 
+```text id="t6f2m8"
+                         START
+                           │
+                           ▼
+                  Include Keypad Library
+                           │
+                           ▼
+              Define 4 Rows and 4 Columns
+                           │
+                           ▼
+                Define Keypad Keymap
+                           │
+                           ▼
+             Assign Row and Column Pins
+                           │
+                           ▼
+                Create Keypad Object
+                           │
+                           ▼
+             Initialize Serial Monitor
+                  at 9600 Baud
+                           │
+                           ▼
+                 Check for Key Press
+                           │
+                           ▼
+                  Is Key Pressed?
+                    /          \
+                  YES           NO
+                   │             │
+                   ▼             │
+             Read Key Value      │
+                   │             │
+                   ▼             │
+          Display Key on Serial  │
+             Monitor             │
+                   │             │
+                   └──────┬──────┘
+                          ▼
+                    Check Again
+                          │
+                          ▼
+                   Repeat Forever
+                          ▲
+                          └────────
+```
 
+### Keypad Pin Connections
 
+| Keypad   | Arduino UNO |
+| -------- | ----------- |
+| Row 1    | D9          |
+| Row 2    | D8          |
+| Row 3    | D7          |
+| Row 4    | D6          |
+| Column 1 | D5          |
+| Column 2 | D4          |
+| Column 3 | D3          |
+| Column 4 | D2          |
 
-CIRCUIT DIAGRAM:
+### PROGRAM-CODE
 
- 
- 
-
-
-SETUP:
-
-a) Connect the 4×4 matrix keypad module to the Arduino Uno as per the circuit diagram. b) Ensure VCC and GND connections are properly made to avoid damage to the Arduino board.
-c) Connect the Arduino Uno to the computer using the USB cable.
-d) Open Arduino IDE, then go to Tools → Board and select Arduino Uno.
-e) In Tools → Port, select the COM port to which the Arduino board is connected. f) Type the keypad interfacing program (sketch) in Arduino IDE.
-g) Compile and Upload the program to transfer it to the Arduino board.
-h) Open Serial Monitor in Arduino IDE to view the recorded keystrokes.
-
-CODE:
-
+```cpp id="r5d1xj"
 #include <Keypad.h>
 
-const byte numRows= 4; //number of rows on the keypad const byte numCols= 4; //number of columns on the keypad
-//keymap defines the key pressed according to the row and columns just as appears on the keypad
+// Define the number of rows and columns
+const byte numRows = 4;
+const byte numCols = 4;
 
-char keymap[numRows][numCols]=
-
+// Define the keypad layout
+char keymap[numRows][numCols] =
 {
-
-{'1', '2', '3', 'A'},
-
-{'4', '5', '6', 'B'},
-
-{'7', '8', '9', 'C'},
-
-{'*', '0', '#', 'D'}
-
+    {'1', '2', '3', 'A'},
+    {'4', '5', '6', 'B'},
+    {'7', '8', '9', 'C'},
+    {'*', '0', '#', 'D'}
 };
 
-//Code that shows the the keypad connections to the arduino terminals byte rowPins[numRows] = {9,8,7,6}; //Rows 0 to 3
-byte colPins[numCols]= {5,4,3,2}; //Columns 0 to 3
+// Define Arduino pins connected to keypad rows
+byte rowPins[numRows] = {9, 8, 7, 6};
 
-//initializes an instance of the Keypad class
+// Define Arduino pins connected to keypad columns
+byte colPins[numCols] = {5, 4, 3, 2};
 
-Keypad   myKeypad=   Keypad(makeKeymap(keymap),   rowPins,   colPins,   numRows, numCols);
- 
-
-
+// Create a Keypad object
+Keypad myKeypad = Keypad(
+    makeKeymap(keymap),
+    rowPins,
+    colPins,
+    numRows,
+    numCols
+);
 
 void setup()
-
-{ Serial.begin(9600);
+{
+    // Start serial communication at 9600 baud
+    Serial.begin(9600);
 }
 
 void loop()
-
 {
+    // Check whether a key has been pressed
+    char keypressed = myKeypad.getKey();
 
-char keypressed = myKeypad.getKey();
-
-if (keypressed != NO_KEY)
-
-{ Serial.println(keypressed);
+    // Check whether a valid key was pressed
+    if (keypressed != NO_KEY)
+    {
+        // Display the pressed key on Serial Monitor
+        Serial.println(keypressed);
+    }
 }
+```
 
-}
+### Line-by-Line Explanation
 
-RESULT:
+`#include <Keypad.h>` includes the Keypad library required to communicate with the matrix keypad.
 
-Successfully executed a program for interfacing a matrix keypad module with arduino to detect and record keystrokes.
+`const byte numRows = 4;` defines the keypad as having **4 rows**.
+
+`const byte numCols = 4;` defines the keypad as having **4 columns**.
+
+`char keymap[numRows][numCols]` creates a two-dimensional character array that represents the arrangement of keys on the keypad.
+
+The four rows define the keypad arrangement:
+
+```text id="p2w9my"
+1   2   3   A
+4   5   6   B
+7   8   9   C
+*   0   #   D
+```
+
+`byte rowPins[numRows] = {9, 8, 7, 6};` specifies the Arduino pins connected to the four rows.
+
+`byte colPins[numCols] = {5, 4, 3, 2};` specifies the Arduino pins connected to the four columns.
+
+`Keypad myKeypad = Keypad(...)` creates an object called `myKeypad` that manages communication between the Arduino and the keypad.
+
+`Serial.begin(9600);` initializes serial communication at **9600 baud** so that the pressed keys can be displayed on the Serial Monitor.
+
+`char keypressed = myKeypad.getKey();` checks the keypad for a key press and stores the pressed key in the variable `keypressed`.
+
+`if (keypressed != NO_KEY)` checks whether an actual key has been pressed.
+
+`Serial.println(keypressed);` displays the detected key on the Serial Monitor.
+
+The `loop()` function continuously checks for new key presses, allowing every keystroke to be recorded as it occurs.
+
+### Viva Questions
+
+**Q1. What is the purpose of this experiment?**
+**Answer:** To interface a 4×4 matrix keypad with Arduino UNO and detect and display the keys pressed by the user.
+
+**Q2. What type of keypad is used?**
+**Answer:** A **4×4 matrix keypad**.
+
+**Q3. How many keys are present on a 4×4 keypad?**
+**Answer:** **16 keys**.
+
+**Q4. Why is it called a matrix keypad?**
+**Answer:** Because the keys are arranged at the intersection of rows and columns, allowing multiple keys to be controlled using fewer Arduino pins.
+
+**Q5. How many rows and columns are present?**
+**Answer:** **4 rows and 4 columns**.
+
+**Q6. How many Arduino pins are required for the keypad?**
+**Answer:** **8 digital pins**, four for rows and four for columns.
+
+**Q7. Which Arduino pins are connected to the rows?**
+**Answer:** D9, D8, D7 and D6.
+
+**Q8. Which Arduino pins are connected to the columns?**
+**Answer:** D5, D4, D3 and D2.
+
+**Q9. What is the purpose of `#include <Keypad.h>`?**
+**Answer:** It includes the Keypad library required for interfacing and scanning the matrix keypad.
+
+**Q10. What is the purpose of the `keymap` array?**
+**Answer:** It defines the character corresponding to each row-column position of the keypad.
+
+**Q11. What does `getKey()` do?**
+**Answer:** It checks whether a key is pressed and returns the corresponding key character.
+
+**Q12. What is `NO_KEY`?**
+**Answer:** `NO_KEY` indicates that no key is currently pressed.
+
+**Q13. Why is `Serial.begin(9600)` used?**
+**Answer:** It initializes serial communication at 9600 baud so that the pressed keys can be displayed on the Serial Monitor.
+
+**Q14. What is the advantage of a matrix keypad?**
+**Answer:** It reduces the number of Arduino pins required compared with connecting every key individually.
+
+**Q15. How many keys can be interfaced using a 4×4 keypad?**
+**Answer:** **16 keys**.
+
+**Q16. What characters are available on this keypad?**
+**Answer:** Numbers **0–9**, letters **A–D**, and symbols **`*` and `#`**.
+
+**Q17. What happens when no key is pressed?**
+**Answer:** `getKey()` returns `NO_KEY`, so nothing is displayed on the Serial Monitor.
+
+**Q18. What happens when a key is pressed?**
+**Answer:** The corresponding character is detected and displayed on the Serial Monitor.
+
+**Q19. What is keypad scanning?**
+**Answer:** Keypad scanning is the process of checking the rows and columns to determine which key is currently pressed.
+
+**Q20. Can the keypad pins be changed?**
+**Answer:** Yes. The row and column pin numbers can be changed in the `rowPins` and `colPins` arrays, provided the corresponding wiring is also changed.
+
+### Can We Change the Keypad Pin Connections?
+
+**Yes.** For example, if the rows are connected to D10, D9, D8, D7 and the columns to D6, D5, D4, D3, change:
+
+```cpp id="z6jv40"
+byte rowPins[numRows] = {9, 8, 7, 6};
+byte colPins[numCols] = {5, 4, 3, 2};
+```
+
+to:
+
+```cpp id="w0s9r2"
+byte rowPins[numRows] = {10, 9, 8, 7};
+byte colPins[numCols] = {6, 5, 4, 3};
+```
+
+The physical keypad connections must match the pin numbers specified in the program.
+
+### Expected Serial Monitor Output
+
+If the student presses the keys **1, 5, A, 8, #, 0**, the Serial Monitor will display:
+
+```text id="m5j6m0"
+1
+5
+A
+8
+#
+0
+```
+
+Each pressed key is detected and displayed on a separate line.
+
+### Important Note
+
+The **Keypad library must be installed** in the Arduino IDE before compiling the program. If the IDE displays an error such as **`Keypad.h: No such file or directory`**, install the **Keypad library** through **Sketch → Include Library → Manage Libraries** and search for **Keypad**.
