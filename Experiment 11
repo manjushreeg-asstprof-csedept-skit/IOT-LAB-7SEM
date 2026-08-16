@@ -1,0 +1,103 @@
+Experiment 11: Develop a program to a water level detection system using Ultrasonic sensor.
+
+
+
+AIM: The main objective of this project is to design and implement a simple, water level monitoring system using an ultrasonic sensor (HC-SR04) interfaced with an Arduino microcontroller. The system continuously measures the distance between the water surface and the sensor, compares it with a predefined threshold, and provides real-time feedback about the water level.
+
+
+COMPONENTS:
+
+
+Sl. No.	
+Quantity	
+Component
+1	1	Arduino Uno R3
+2	1	USB Cable
+3	4	Jumper Wires
+4	1	Ultrasonic Sensor
+
+
+
+
+CIRCUIT DIAGRAM:
+
+
+ 
+ 
+
+
+Ultrasonic Sensor	Arduino
+GND	GND
+VCC	5V
+TRIG	D9
+ECHO	D10
+
+
+
+SETUP:
+
+a) Connect the HC-SR04 Ultrasonic Sensor to the Arduino Uno as per the circuit diagram (VCC → 5V, GND → GND, TRIG → D9, ECHO → D10). b) Connect the Arduino Uno to the computer using a USB cable.
+c) Open the Arduino IDE, then go to Tools → Board and select Arduino
+Uno.
+d) In Tools → Port, select the COM port of the connected Arduino Uno. e) Type the program into the Arduino IDE and upload it.
+f) Open the Serial Monitor to observe distance readings and alerts when water level goes below the threshold.
+
+CODE:
+
+// Water Level Detection using Ultrasonic Sensor (HC-SR04)
+
+
+const int trigPin = 9;  // Trigger pin const int echoPin = 10;  // Echo pin
+
+
+long duration;
+int distance;
+const int threshold = 50; // Threshold distance in cm
+
+
+void setup() { pinMode(trigPin, OUTPUT); pinMode(echoPin, INPUT); Serial.begin(9600);
+}
+
+
+void loop() {
+// Clear trigPin digitalWrite(trigPin, LOW); delayMicroseconds(2);
+
+
+// Trigger pulse
+ 
+
+digitalWrite(trigPin, HIGH); delayMicroseconds(10); digitalWrite(trigPin, LOW);
+
+
+// Read echo
+duration = pulseIn(echoPin, HIGH);
+
+
+// Calculate distance in cm distance = duration * 0.034 / 2;
+
+
+Serial.print("Distance from Sensor = "); Serial.print(distance);
+Serial.println(" cm");
+
+
+// Check condition
+if (distance < threshold) { Serial.println("ALERT: Low Water Level!");
+} else {
+Serial.println("Water Level OK");
+}
+
+
+Serial.println("-----------------------------");
+delay(1000);
+}
+
+
+RESULT:
+
+
+
+The Arduino Uno was successfully interfaced with the HC-SR04 ultrasonic sensor, and the system was able to measure the distance between the sensor and the water surface in real time.
+When the measured distance was found to be less than the predefined threshold of 50 cm, the Serial Monitor displayed the message “ALERT: Low Water Level!”, indicating that the water level had dropped below the safe limit. On the other hand, when the measured distance was greater than or equal to the threshold value, the Serial Monitor displayed “Water Level
+OK”, confirming that the water level was within the acceptable range.
+Hence, the experiment successfully demonstrated water level detection and
+alert generation using an ultrasonic sensor.
