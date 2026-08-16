@@ -1,80 +1,237 @@
-Experiment  9:  Develop  a  program  to  demonstrate  weather  station readings using Arduino
+## Experiment 9: Develop a program to demonstrate weather station readings using Arduino
 
+### Logic (Algorithm)
 
+**Step 1:** Include the DHT sensor library required to communicate with the DHT22 sensor.
 
-AIM:  To  design  and  implement  an  Arduino-based  weather  station  that measures and displays temperature and humidity in real time.
+**Step 2:** Define digital pin `D2` as the pin connected to the DHT22 data pin and specify the sensor type as `DHT22`.
 
+**Step 3:** Create a DHT sensor object using the defined pin and sensor type.
 
+**Step 4:** In the `setup()` function, initialize serial communication at **9600 baud rate** and start the DHT22 sensor.
 
-COMPONENTS:
+**Step 5:** Inside the `loop()` function, read the temperature and humidity values from the DHT22 sensor.
 
-Sl. No.	
-Quantity	
-Component
-1	1	Arduino Uno R3
-2	1	USB Cable
-3	3	Jumper Wire
-4	1	DHT22 Sensor
+**Step 6:** Check whether the sensor readings are valid using `isnan()`.
 
+**Step 7:** If the readings are valid, display the temperature in **degree Celsius (°C)** and humidity in **percentage (%)** on the Serial Monitor.
 
- 
-CIRCUIT CONNECTIONS:
+**Step 8:** If the sensor fails to provide valid readings, display an error message.
 
+**Step 9:** Wait for 1 second and repeat the process continuously to obtain real-time weather readings.
 
+### Program Flow
 
-DHT22 Pin	
-Arduino
-VCC(+)	5V
-GND(-)	GND
+```text id="6yq5k5"
+                     START
+                       │
+                       ▼
+             Include DHT Library
+                       │
+                       ▼
+          Define DHT22 and Data Pin D2
+                       │
+                       ▼
+             Initialize DHT Sensor
+                       │
+                       ▼
+          Start Serial Communication
+                at 9600 Baud
+                       │
+                       ▼
+          Read Temperature & Humidity
+                       │
+                       ▼
+          Are Readings Valid?
+              /             \
+            YES              NO
+             │                │
+             ▼                ▼
+      Display Temperature   Display Error
+       & Humidity Values      Message
+             │                │
+             └───────┬────────┘
+                     ▼
+                Wait 1 Second
+                     │
+                     ▼
+               Repeat Forever
+                     ▲
+                     └────────
+```
 
-Data	
-Digital Pin D2
+### PROGRAM-CODE
 
-
-
-
-SETUP:
-
-a) Connect the DHT22 sensor to the Arduino Uno according to the circuit: VCC to 5V, GND to GND, and Data to digital pin D2.
-b) Connect the Arduino Uno to the computer using a USB cable.
-c) Open the Arduino IDE, go to Tools, select Board, and choose Arduino
-Uno.
-d) In Tools, select Port and choose the COM port for your Arduino.
- 
-
-e) Install the DHT sensor library by Adafruit if it is not already installed. f) Type the program into the Arduino IDE and upload it to the Arduino.
-g) Open the Serial Monitor to see the temperature and humidity readings from the DHT22 sensor.
-
-CODE:
-
+```cpp
 #include <DHT.h>
+
+// Define the Arduino digital pin connected to DHT22 data
 #define DHTPIN 2
+
+// Define the type of DHT sensor
 #define DHTTYPE DHT22
+
+// Create a DHT sensor object
 DHT dht(DHTPIN, DHTTYPE);
 
+void setup()
+{
+    // Start serial communication at 9600 baud
+    Serial.begin(9600);
 
-void setup() { Serial.begin(9600); dht.begin();
-Serial.println("Weather Station Initialized");
+    // Initialize the DHT22 sensor
+    dht.begin();
+
+    // Display initialization message
+    Serial.println("Weather Station Initialized");
 }
 
+void loop()
+{
+    // Read temperature in Celsius
+    float temperature = dht.readTemperature(false);
 
-void loop() {
-float temperature = dht.readTemperature(false);
-float humidity = dht.readHumidity();
+    // Read relative humidity in percentage
+    float humidity = dht.readHumidity();
 
+    // Check whether the sensor readings are valid
+    if (!isnan(temperature) && !isnan(humidity))
+    {
+        // Display temperature
+        Serial.print("Temperature: ");
+        Serial.print(temperature);
 
-if (!isnan(temperature) && !isnan(humidity)) { Serial.print("Temperature: "); Serial.print(temperature);
-Serial.print(" °C, Humidity: "); Serial.print(humidity); Serial.println("%");
-} else {
-Serial.println("Failed to read from DHT sensor!");
+        // Display humidity
+        Serial.print(" °C, Humidity: ");
+        Serial.print(humidity);
+        Serial.println("%");
+    }
+    else
+    {
+        // Display error if sensor reading fails
+        Serial.println("Failed to read from DHT sensor!");
+    }
+
+    // Wait for 1 second before taking the next reading
+    delay(1000);
 }
+```
 
+### Line-by-Line Explanation
 
-delay(1000);
-}
+`#include <DHT.h>` includes the DHT library required to communicate with the DHT22 sensor.
 
+`#define DHTPIN 2` defines digital pin **2** as the data pin connected to the DHT22 sensor.
 
-RESULT:
+`#define DHTTYPE DHT22` specifies that the sensor being used is a **DHT22**.
 
+`DHT dht(DHTPIN, DHTTYPE);` creates a DHT sensor object using pin 2 and the DHT22 sensor type.
 
-The Arduino-based weather station using the DHT22 sensor successfully measured  and  displayed  real-time  temperature  and humidity.  The  sensor provided accurate readings, and the program correctly processed and output the data on the Serial Monitor
+`Serial.begin(9600);` starts serial communication between Arduino and the computer at **9600 baud**.
+
+`dht.begin();` initializes the DHT22 sensor so that Arduino can communicate with it.
+
+`dht.readTemperature(false);` reads the temperature from the DHT22 sensor in **Celsius**. The `false` parameter means Celsius is selected instead of Fahrenheit.
+
+`dht.readHumidity();` reads the relative humidity from the sensor in **percentage (%)**.
+
+`isnan(temperature)` checks whether the temperature value is **NaN (Not a Number)**, which indicates an invalid sensor reading.
+
+`!isnan(temperature) && !isnan(humidity)` ensures that both temperature and humidity readings are valid before displaying them.
+
+`Serial.print()` and `Serial.println()` display the temperature and humidity values on the Serial Monitor.
+
+`delay(1000);` pauses the program for **1 second** before taking another reading.
+
+### Viva Questions
+
+**Q1. What is the purpose of this experiment?**
+**Answer:** To measure and display real-time temperature and humidity using a DHT22 sensor and Arduino UNO.
+
+**Q2. Which sensor is used in this experiment?**
+**Answer:** **DHT22 sensor.**
+
+**Q3. Which Arduino pin is connected to the DHT22 data pin?**
+**Answer:** Digital pin **D2**.
+
+**Q4. What parameters does the DHT22 measure?**
+**Answer:** **Temperature and relative humidity.**
+
+**Q5. Why is `#include <DHT.h>` used?**
+**Answer:** It includes the DHT library required to communicate with the DHT22 sensor.
+
+**Q6. What is the purpose of `#define DHTTYPE DHT22`?**
+**Answer:** It tells the program that the connected DHT sensor is a DHT22.
+
+**Q7. What is the purpose of `dht.begin()`?**
+**Answer:** It initializes the DHT sensor before readings are taken.
+
+**Q8. What does `dht.readTemperature(false)` do?**
+**Answer:** It reads the temperature from the DHT22 sensor in **degrees Celsius**.
+
+**Q9. What does `dht.readHumidity()` do?**
+**Answer:** It reads the relative humidity in **percentage**.
+
+**Q10. What is relative humidity?**
+**Answer:** Relative humidity is the amount of water vapor present in air expressed as a percentage of the maximum amount the air can hold at that temperature.
+
+**Q11. Why is `isnan()` used?**
+**Answer:** It checks whether the sensor returned an invalid numerical value.
+
+**Q12. What happens if the DHT22 reading fails?**
+**Answer:** The program displays **"Failed to read from DHT sensor!"** on the Serial Monitor.
+
+**Q13. Why is `Serial.begin(9600)` used?**
+**Answer:** It establishes serial communication at 9600 baud so that the readings can be viewed on the Serial Monitor.
+
+**Q14. Why is a library required for the DHT22?**
+**Answer:** The library provides functions that simplify communication with the DHT22 and reading its temperature and humidity data.
+
+**Q15. What is the difference between DHT11 and DHT22?**
+**Answer:** DHT22 generally provides a wider measurement range and better accuracy/resolution than DHT11.
+
+**Q16. Why should the DHT22 not be read too frequently?**
+**Answer:** The sensor has a limited measurement rate, so sufficient time should be allowed between readings for reliable results.
+
+**Q17. What does `delay(1000)` do?**
+**Answer:** It pauses the program for **1000 milliseconds or 1 second**.
+
+**Q18. What is the purpose of the Serial Monitor?**
+**Answer:** It allows us to view the temperature, humidity and error messages sent by the Arduino.
+
+**Q19. What type of signal does the DHT22 provide to Arduino?**
+**Answer:** It uses a **digital communication signal** through its data pin.
+
+**Q20. What should you check if the Serial Monitor shows "Failed to read from DHT sensor!"?**
+**Answer:** Check the sensor wiring, power supply, data pin, correct DHT library installation, sensor type definition, and connections.
+
+### Can We Change the Data Pin?
+
+**Yes.** The DHT22 data pin can be connected to another suitable digital pin. For example, if the sensor data pin is connected to **D4**, change:
+
+```cpp
+#define DHTPIN 2
+```
+
+to:
+
+```cpp
+#define DHTPIN 4
+```
+
+Then connect the DHT22 **Data pin to Arduino digital pin 4**.
+
+### Expected Serial Monitor Output
+
+```text id="0l75fn"
+Weather Station Initialized
+
+Temperature: 27.50 °C, Humidity: 65.20%
+Temperature: 27.60 °C, Humidity: 65.10%
+Temperature: 27.60 °C, Humidity: 64.90%
+Temperature: 27.70 °C, Humidity: 65.00%
+```
+
+### Important Note
+
+The DHT22 library must be installed before compiling the program. If the Arduino IDE shows errors such as **`DHT.h: No such file or directory`** or **`Adafruit_Sensor.h: No such file or directory`**, the required DHT library and its dependency need to be installed correctly.
