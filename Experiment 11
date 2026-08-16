@@ -1,103 +1,303 @@
-Experiment 11: Develop a program to a water level detection system using Ultrasonic sensor.
+## Experiment 11: Develop a program for a water level detection system using an Ultrasonic Sensor
 
+### Logic (Algorithm)
 
+**Step 1:** Define the HC-SR04 ultrasonic sensor's Trigger pin as digital pin **9** and Echo pin as digital pin **10**.
 
-AIM: The main objective of this project is to design and implement a simple, water level monitoring system using an ultrasonic sensor (HC-SR04) interfaced with an Arduino microcontroller. The system continuously measures the distance between the water surface and the sensor, compares it with a predefined threshold, and provides real-time feedback about the water level.
+**Step 2:** Define a threshold distance of **50 cm** for water level monitoring.
 
+**Step 3:** In the `setup()` function, configure the Trigger pin as `OUTPUT`, Echo pin as `INPUT`, and initialize serial communication at **9600 baud rate**.
 
-COMPONENTS:
+**Step 4:** Inside the `loop()` function, set the Trigger pin to LOW for 2 microseconds to ensure a clean starting signal.
 
+**Step 5:** Send a HIGH pulse of **10 microseconds** through the Trigger pin to generate an ultrasonic pulse.
 
-Sl. No.	
-Quantity	
-Component
-1	1	Arduino Uno R3
-2	1	USB Cable
-3	4	Jumper Wires
-4	1	Ultrasonic Sensor
+**Step 6:** Set the Trigger pin back to LOW and use `pulseIn()` to measure the time taken by the ultrasonic echo to return to the sensor.
 
+**Step 7:** Calculate the distance between the sensor and water surface using the speed of sound.
 
+**Step 8:** Display the measured distance on the Serial Monitor.
 
+**Step 9:** Compare the measured distance with the predefined threshold of 50 cm. If the distance is less than 50 cm, display **"ALERT: Low Water Level!"**; otherwise, display **"Water Level OK"**.
 
-CIRCUIT DIAGRAM:
+**Step 10:** Wait for 1 second and repeat the measurement continuously.
 
+### Program Flow
 
- 
- 
+```text id="o1v44t"
+                         START
+                           │
+                           ▼
+                Initialize HC-SR04
+                           │
+                           ▼
+             Set TRIG → OUTPUT
+             Set ECHO → INPUT
+                           │
+                           ▼
+                Start Serial Monitor
+                   at 9600 Baud
+                           │
+                           ▼
+                Set TRIG LOW for 2 µs
+                           │
+                           ▼
+               Send 10 µs TRIG Pulse
+                           │
+                           ▼
+                 Receive ECHO Pulse
+                           │
+                           ▼
+              Measure Echo Duration
+                           │
+                           ▼
+              Calculate Distance (cm)
+                           │
+                           ▼
+               Display Distance Value
+                           │
+                           ▼
+              Is Distance < 50 cm?
+                    /             \
+                  YES              NO
+                   │                │
+                   ▼                ▼
+            LOW WATER LEVEL      WATER LEVEL OK
+                ALERT
+                   │                │
+                   └───────┬────────┘
+                           ▼
+                      Wait 1 Second
+                           │
+                           ▼
+                     Repeat Forever
+                           ▲
+                           └────────
+```
 
+### PROGRAM-CODE
 
-Ultrasonic Sensor	Arduino
-GND	GND
-VCC	5V
-TRIG	D9
-ECHO	D10
-
-
-
-SETUP:
-
-a) Connect the HC-SR04 Ultrasonic Sensor to the Arduino Uno as per the circuit diagram (VCC → 5V, GND → GND, TRIG → D9, ECHO → D10). b) Connect the Arduino Uno to the computer using a USB cable.
-c) Open the Arduino IDE, then go to Tools → Board and select Arduino
-Uno.
-d) In Tools → Port, select the COM port of the connected Arduino Uno. e) Type the program into the Arduino IDE and upload it.
-f) Open the Serial Monitor to observe distance readings and alerts when water level goes below the threshold.
-
-CODE:
-
+```cpp id="z5s9m3"
 // Water Level Detection using Ultrasonic Sensor (HC-SR04)
 
+// Define Trigger and Echo pins
+const int trigPin = 9;
+const int echoPin = 10;
 
-const int trigPin = 9;  // Trigger pin const int echoPin = 10;  // Echo pin
-
-
+// Variables for measuring echo duration and distance
 long duration;
 int distance;
-const int threshold = 50; // Threshold distance in cm
 
+// Define the threshold distance in centimeters
+const int threshold = 50;
 
-void setup() { pinMode(trigPin, OUTPUT); pinMode(echoPin, INPUT); Serial.begin(9600);
+void setup()
+{
+    // Configure Trigger pin as OUTPUT
+    pinMode(trigPin, OUTPUT);
+
+    // Configure Echo pin as INPUT
+    pinMode(echoPin, INPUT);
+
+    // Start serial communication at 9600 baud
+    Serial.begin(9600);
 }
 
+void loop()
+{
+    // Clear the Trigger pin
+    digitalWrite(trigPin, LOW);
+    delayMicroseconds(2);
 
-void loop() {
-// Clear trigPin digitalWrite(trigPin, LOW); delayMicroseconds(2);
+    // Generate a 10-microsecond ultrasonic trigger pulse
+    digitalWrite(trigPin, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(trigPin, LOW);
 
+    // Measure the time taken by the echo to return
+    duration = pulseIn(echoPin, HIGH);
 
-// Trigger pulse
- 
+    // Calculate distance in centimeters
+    distance = duration * 0.034 / 2;
 
-digitalWrite(trigPin, HIGH); delayMicroseconds(10); digitalWrite(trigPin, LOW);
+    // Display the distance on the Serial Monitor
+    Serial.print("Distance from Sensor = ");
+    Serial.print(distance);
+    Serial.println(" cm");
 
+    // Compare distance with threshold
+    if (distance < threshold)
+    {
+        Serial.println("ALERT: Low Water Level!");
+    }
+    else
+    {
+        Serial.println("Water Level OK");
+    }
 
-// Read echo
-duration = pulseIn(echoPin, HIGH);
+    Serial.println("-----------------------------");
 
-
-// Calculate distance in cm distance = duration * 0.034 / 2;
-
-
-Serial.print("Distance from Sensor = "); Serial.print(distance);
-Serial.println(" cm");
-
-
-// Check condition
-if (distance < threshold) { Serial.println("ALERT: Low Water Level!");
-} else {
-Serial.println("Water Level OK");
+    // Wait for 1 second
+    delay(1000);
 }
+```
 
+### Line-by-Line Explanation
 
-Serial.println("-----------------------------");
-delay(1000);
-}
+`const int trigPin = 9;` defines digital pin **9** as the Trigger pin of the HC-SR04 sensor.
 
+`const int echoPin = 10;` defines digital pin **10** as the Echo pin.
 
-RESULT:
+`long duration;` creates a variable to store the time taken by the ultrasonic pulse to travel to the water surface and return.
 
+`int distance;` creates a variable to store the calculated distance in centimeters.
 
+`const int threshold = 50;` defines **50 cm** as the threshold distance used for the water level condition.
 
-The Arduino Uno was successfully interfaced with the HC-SR04 ultrasonic sensor, and the system was able to measure the distance between the sensor and the water surface in real time.
-When the measured distance was found to be less than the predefined threshold of 50 cm, the Serial Monitor displayed the message “ALERT: Low Water Level!”, indicating that the water level had dropped below the safe limit. On the other hand, when the measured distance was greater than or equal to the threshold value, the Serial Monitor displayed “Water Level
-OK”, confirming that the water level was within the acceptable range.
-Hence, the experiment successfully demonstrated water level detection and
-alert generation using an ultrasonic sensor.
+`pinMode(trigPin, OUTPUT);` configures the Trigger pin as an output because Arduino sends the ultrasonic trigger pulse through it.
+
+`pinMode(echoPin, INPUT);` configures the Echo pin as an input because Arduino receives the returned ultrasonic signal through it.
+
+`Serial.begin(9600);` starts serial communication at **9600 baud**.
+
+`digitalWrite(trigPin, LOW);` ensures that the Trigger pin starts in a LOW state.
+
+`delayMicroseconds(2);` waits for **2 microseconds** before generating the trigger pulse.
+
+`digitalWrite(trigPin, HIGH);` sets the Trigger pin HIGH to start the ultrasonic transmission.
+
+`delayMicroseconds(10);` keeps the Trigger pin HIGH for **10 microseconds**, as required to trigger the HC-SR04.
+
+`digitalWrite(trigPin, LOW);` ends the trigger pulse.
+
+`duration = pulseIn(echoPin, HIGH);` measures how long the Echo pin remains HIGH. This represents the travel time of the ultrasonic wave.
+
+`distance = duration * 0.034 / 2;` calculates the distance in centimeters. The approximate speed of sound is **0.034 cm/µs**, and division by 2 is required because the ultrasonic wave travels to the water surface and back.
+
+`Serial.print()` and `Serial.println()` display the calculated distance on the Serial Monitor.
+
+`if (distance < threshold)` checks whether the measured distance is less than 50 cm.
+
+`Serial.println("ALERT: Low Water Level!");` displays the low-water-level alert when the measured distance is below the selected threshold.
+
+`Serial.println("Water Level OK");` displays the normal condition when the distance is 50 cm or greater.
+
+`delay(1000);` waits for **1 second** before taking the next measurement.
+
+### Viva Questions
+
+**Q1. What is the purpose of this experiment?**
+**Answer:** To detect and monitor the water level using an HC-SR04 ultrasonic sensor and Arduino UNO.
+
+**Q2. Which sensor is used in this experiment?**
+**Answer:** **HC-SR04 ultrasonic sensor.**
+
+**Q3. Which pins are used for the HC-SR04 Trigger and Echo?**
+**Answer:** Trigger is connected to **D9** and Echo is connected to **D10**.
+
+**Q4. What is the working principle of an ultrasonic sensor?**
+**Answer:** It sends ultrasonic sound waves and measures the time taken for the reflected wave to return. The distance is calculated from this time.
+
+**Q5. What is the purpose of the Trigger pin?**
+**Answer:** The Trigger pin is used to initiate the transmission of an ultrasonic pulse.
+
+**Q6. What is the purpose of the Echo pin?**
+**Answer:** The Echo pin receives the reflected ultrasonic signal and provides a pulse whose duration represents the travel time.
+
+**Q7. Why is a 10-microsecond pulse generated?**
+**Answer:** The HC-SR04 requires a trigger pulse of approximately 10 microseconds to start an ultrasonic measurement.
+
+**Q8. What does `pulseIn()` do?**
+**Answer:** It measures the duration of a HIGH or LOW pulse on a specified digital pin.
+
+**Q9. What is the purpose of `duration * 0.034 / 2`?**
+**Answer:** It converts the measured echo time into distance in centimeters using the approximate speed of sound and divides by 2 because the sound travels to the object and back.
+
+**Q10. Why is the result divided by 2?**
+**Answer:** Because the measured time represents the total round-trip distance of the ultrasonic wave.
+
+**Q11. What is the threshold value used in this experiment?**
+**Answer:** **50 cm.**
+
+**Q12. What happens when the measured distance is less than 50 cm?**
+**Answer:** The program displays **"ALERT: Low Water Level!"**.
+
+**Q13. What happens when the measured distance is 50 cm or greater?**
+**Answer:** The program displays **"Water Level OK"**.
+
+**Q14. Why does a larger distance indicate a lower water level in this setup?**
+**Answer:** The sensor is mounted above the water. When the water level falls, the distance between the sensor and water surface increases.
+
+**Q15. How can the water level be determined using distance?**
+**Answer:** If the tank height and sensor position are known, the water level can be estimated by subtracting the measured distance from the reference tank height.
+
+**Q16. What is the purpose of `delayMicroseconds(10)`?**
+**Answer:** It generates the required 10-microsecond Trigger pulse for the HC-SR04.
+
+**Q17. What is the purpose of `Serial.begin(9600)`?**
+**Answer:** It establishes serial communication at 9600 baud so that distance and alert messages can be viewed on the Serial Monitor.
+
+**Q18. Can the threshold value be changed?**
+**Answer:** Yes. The threshold can be changed according to the size of the tank and the required water-level limit.
+
+**Q19. What happens if no echo is received?**
+**Answer:** `pulseIn()` can wait for the expected pulse and, depending on its configuration and the situation, may return zero after its timeout. The resulting distance may therefore be invalid or zero.
+
+**Q20. What are some applications of ultrasonic water-level monitoring?**
+**Answer:** It can be used in water tanks, reservoirs, industrial liquid-level monitoring, automatic water-level systems and smart water-management systems.
+
+### Can We Change the Ultrasonic Sensor Pins?
+
+**Yes.** The Trigger and Echo pins can be changed to other suitable digital pins.
+
+For example, if Trigger is connected to **D7** and Echo to **D8**, change:
+
+```cpp id="7wm05x"
+const int trigPin = 9;
+const int echoPin = 10;
+```
+
+to:
+
+```cpp id="t7z5v9"
+const int trigPin = 7;
+const int echoPin = 8;
+```
+
+Then connect the HC-SR04 **TRIG → D7** and **ECHO → D8**.
+
+### Can We Change the Threshold?
+
+**Yes.** The current program uses:
+
+```cpp id="n0l1pu"
+const int threshold = 50;
+```
+
+If the required alert distance is 30 cm, change it to:
+
+```cpp id="4bqk1y"
+const int threshold = 30;
+```
+
+The threshold should be selected according to the **tank dimensions and the desired minimum water level**.
+
+### Expected Serial Monitor Output
+
+```text id="q7o4r0"
+Distance from Sensor = 65 cm
+Water Level OK
+-----------------------------
+
+Distance from Sensor = 52 cm
+Water Level OK
+-----------------------------
+
+Distance from Sensor = 42 cm
+ALERT: Low Water Level!
+-----------------------------
+```
+
+### Important Note
+
+The condition in this program is based on **distance from the sensor to the water surface**, not directly on water height. Therefore, the interpretation of "Low Water Level" depends on how the ultrasonic sensor is mounted and how the threshold is selected. In an actual tank, the threshold should be calibrated according to the tank's height and the required minimum water level.
