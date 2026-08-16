@@ -1,84 +1,229 @@
-Experiment 10: Develop a program to setup a UART Protocol and pass a string through the protocol
+## Experiment 10: Develop a program to set up a UART protocol and pass a string through the protocol
 
+### Logic (Algorithm)
 
-AIM: To  develop  a  program  that  configures  the  UART  protocol  and  successfully transmit a string of characters through it.
+**Step 1:** Use two Arduino UNO boards, one as the **Transmitter** and the other as the **Receiver**.
 
-COMPONENTS:	
-	Sl. No.	Quantity	Component
-	1	2	Arduino Uno R3
-	2	2	USB Cable
-	3	3	Jumper Wires
+**Step 2:** Connect the TX pin of the Transmitter Arduino to the RX pin of the Receiver Arduino and connect the GND of both boards together.
 
+**Step 3:** Configure UART serial communication on both Arduino boards at a baud rate of **9600** using `Serial.begin(9600)`.
 
+**Step 4:** In the Transmitter program, create a string message to be transmitted.
 
-CIRCUIT DIAGRAM:
+**Step 5:** Send the string through UART using `Serial.println()`.
 
- 
- 
+**Step 6:** In the Receiver program, check whether data is available using `Serial.available()`.
 
-SETUP:
+**Step 7:** If data is available, read the incoming string using `Serial.readStringUntil('\n')`.
 
-a) Connect the two Arduino boards as per the given circuit diagram.
-b) Ensure proper TX–RX cross connection and a common GND between both Arduinos. c) Connect both Arduinos to the computer via USB cables.
-d) Open Arduino IDE, then go to Tools → Board and select Arduino Uno.
-e) In  Tools → Port, select the COM port of the first board, type the Transmitter
-program, and upload.
-f) Next, select the COM port of the second board, type the Receiver program, and upload. g) Open the Serial Monitor of the Receiver Arduino to observe the transmitted data.
+**Step 8:** Display the received string on the Receiver's Serial Monitor.
 
+**Step 9:** The Transmitter waits for 1 second and sends the message again, so the communication continues continuously.
 
-CODE:
+### Program Flow
 
+```text id="v7u7gf"
+                 START
+                   │
+          ┌────────┴────────┐
+          ▼                 ▼
+     TRANSMITTER         RECEIVER
+          │                 │
+          ▼                 ▼
+   Initialize UART     Initialize UART
+      at 9600             at 9600
+          │                 │
+          ▼                 ▼
+    Create String       Check whether
+       Message          data is available
+          │                 │
+          ▼                 ▼
+   Send String via      Data Available?
+       UART              /          \
+                        YES          NO
+                         │            │
+                         ▼            │
+                  Read Received      │
+                      String          │
+                         │            │
+                         ▼            │
+                  Display String      │
+                         │            │
+                         └─────┬──────┘
+                               ▼
+                          Wait 1 Second
+                               │
+                               ▼
+                       Transmit Again
+                               │
+                               └──────►
+```
+
+### Important Circuit Connection
+
+| Transmitter Arduino | Receiver Arduino |
+| ------------------- | ---------------- |
+| TX (Pin 1)          | RX (Pin 0)       |
+| GND                 | GND              |
+
+**Important:** TX and RX must be **cross-connected**. The transmitter's TX sends data to the receiver's RX.
+
+### PROGRAM-CODE – TRANSMITTER
+
+```cpp
 // UART Transmitter Code for Arduino UNO
 
-void setup() {
-
-// Initialize UART communication at 9600 baud rate
-
-Serial.begin(9600);
-
+void setup()
+{
+    // Initialize UART communication at 9600 baud rate
+    Serial.begin(9600);
 }
 
-void loop() {
+void loop()
+{
+    // Create the string to transmit
+    String message = "Hello from Transmitter Arduino!";
 
-// String to transmit
+    // Send the string through UART
+    Serial.println(message);
 
-String message = "Hello from Transmitter Arduino!";
-
-// Send string
-
-Serial.println(message);
-
-// Small delay before sending again delay(1000);
+    // Wait for 1 second before sending again
+    delay(1000);
 }
+```
 
+### PROGRAM-CODE – RECEIVER
+
+```cpp
 // UART Receiver Code for Arduino UNO
 
-void setup() {
-
-// Initialize UART communication at 9600 baud rate
-
-Serial.begin(9600);
-
-}
- 
-
-
-
-void loop() {
-
-// Check if data is available if (Serial.available() > 0) {
-// Read incoming string
-
-String receivedData = Serial.readStringUntil('\n');
-
-// Print received string to Serial Monitor
-
-Serial.println("Received: " + receivedData);
-
+void setup()
+{
+    // Initialize UART communication at 9600 baud rate
+    Serial.begin(9600);
 }
 
+void loop()
+{
+    // Check whether data is available
+    if (Serial.available() > 0)
+    {
+        // Read the incoming string until newline character
+        String receivedData = Serial.readStringUntil('\n');
+
+        // Display the received string
+        Serial.println("Received: " + receivedData);
+    }
 }
+```
 
-RESULT:
+### Line-by-Line Explanation – Transmitter
 
-The two Arduino Uno boards successfully communicated using UART. The transmitter board sent a string message periodically, and the receiver board correctly received and displayed the message on the Serial Monitor
+`Serial.begin(9600);` initializes UART serial communication at a baud rate of **9600 bits per second**.
+
+`String message = "Hello from Transmitter Arduino!";` creates a string variable containing the message to be transmitted.
+
+`Serial.println(message);` sends the message through the Arduino's UART TX pin and adds a newline character at the end.
+
+`delay(1000);` creates a delay of **1 second** before the next transmission.
+
+### Line-by-Line Explanation – Receiver
+
+`Serial.begin(9600);` initializes UART communication at the same **9600 baud rate**.
+
+`Serial.available() > 0` checks whether one or more bytes of data have been received and are waiting in the serial receive buffer.
+
+`Serial.readStringUntil('\n');` reads the incoming characters until the newline character `\n` sent by the transmitter is received.
+
+`Serial.println("Received: " + receivedData);` displays the received message on the Receiver Arduino's Serial Monitor.
+
+### Viva Questions
+
+**Q1. What is UART?**
+**Answer:** UART stands for **Universal Asynchronous Receiver/Transmitter**. It is a serial communication protocol used to transmit and receive data between devices.
+
+**Q2. What is the purpose of this experiment?**
+**Answer:** To establish UART communication between two Arduino UNO boards and transmit a string from one Arduino to another.
+
+**Q3. How many Arduino boards are used?**
+**Answer:** Two Arduino UNO boards: one as the **transmitter** and one as the **receiver**.
+
+**Q4. What is the baud rate used in this experiment?**
+**Answer:** **9600 baud**.
+
+**Q5. Which pins are used for UART communication on Arduino UNO?**
+**Answer:** **Pin 0 (RX)** and **Pin 1 (TX)**.
+
+**Q6. What does TX mean?**
+**Answer:** TX means **Transmit**. It is used to send serial data.
+
+**Q7. What does RX mean?**
+**Answer:** RX means **Receive**. It is used to receive serial data.
+
+**Q8. How should TX and RX be connected between two Arduino boards?**
+**Answer:** The **TX of the transmitter is connected to the RX of the receiver**, and both boards must share a common GND.
+
+**Q9. Why should TX and RX be cross-connected?**
+**Answer:** Because the TX pin sends data and the RX pin receives data. Therefore, the transmitter's output must be connected to the receiver's input.
+
+**Q10. What is the purpose of `Serial.begin(9600)`?**
+**Answer:** It initializes serial communication at a baud rate of 9600.
+
+**Q11. What does `Serial.println()` do?**
+**Answer:** It sends data through the serial interface and adds a newline character at the end.
+
+**Q12. What is the purpose of `Serial.available()`?**
+**Answer:** It checks whether data has been received and is available in the serial receive buffer.
+
+**Q13. What does `Serial.readStringUntil('\n')` do?**
+**Answer:** It reads the incoming characters until a newline character is received.
+
+**Q14. Why is `'\n'` used in the receiver program?**
+**Answer:** The transmitter uses `Serial.println()`, which adds a newline character after the message. The receiver uses this character to identify the end of the string.
+
+**Q15. What happens if TX and RX are connected directly instead of cross-connected?**
+**Answer:** Communication will not work correctly because both devices will not have their transmit and receive lines connected appropriately.
+
+**Q16. Why is a common GND required?**
+**Answer:** A common ground provides a common electrical reference for the signals between the two Arduino boards.
+
+**Q17. What does asynchronous communication mean?**
+**Answer:** It means the communicating devices do not use a separate shared clock signal. Both devices agree on communication parameters such as baud rate.
+
+**Q18. What is a baud rate?**
+**Answer:** Baud rate represents the number of signal symbols transmitted per second. In common UART settings such as this experiment, **9600 baud** is used as the communication rate.
+
+**Q19. What happens if the transmitter and receiver use different baud rates?**
+**Answer:** The received data may be corrupted or displayed incorrectly because both devices are not synchronized to the same communication rate.
+
+**Q20. Can we change the message?**
+**Answer:** Yes. For example, the transmitter message can be changed from:
+
+```cpp
+String message = "Hello from Transmitter Arduino!";
+```
+
+to:
+
+```cpp
+String message = "IoT Lab UART Communication";
+```
+
+The receiver will display the new message.
+
+### Important Note About Arduino UNO UART Pins
+
+The Arduino UNO's **pins 0 (RX) and 1 (TX)** are also connected to the USB-to-serial interface used by the computer. Therefore, when the Arduino is connected to the computer through USB, using pins 0 and 1 for communication with another Arduino can interfere with uploading programs or using the Serial Monitor.
+
+For this experiment, students should **upload the programs separately** and make sure the TX/RX wiring does not interfere with uploading. If necessary, disconnect the TX/RX jumper wires while uploading and reconnect them afterward.
+
+### Expected Output on Receiver Serial Monitor
+
+```text
+Received: Hello from Transmitter Arduino!
+Received: Hello from Transmitter Arduino!
+Received: Hello from Transmitter Arduino!
+Received: Hello from Transmitter Arduino!
+```
+
+The message is transmitted approximately once every **1 second**, and the receiver displays each successfully received string on its Serial Monitor.
