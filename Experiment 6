@@ -1,75 +1,233 @@
-Experiment 6: Develop a program to classify dry and wet waste with the
-Moisture Sensor
+ Experiment 6: Develop a program to classify dry and wet waste using a Moisture Sensor
 
+ Logic (Algorithm)
 
+**Step 1:** Define the moisture sensor pin as analog pin `A0` and create a variable to store the moisture sensor reading.
 
-AIM: To develop a program that uses a soil moisture sensor to classify waste as dry or wet based on moisture level readings.
+**Step 2:** Define a threshold value of `700` to distinguish between dry and wet waste.
 
+**Step 3:** In the `setup()` function, initialize serial communication at **9600 baud rate** and configure the moisture sensor pin as an `INPUT`.
 
+**Step 4:** Inside the `loop()` function, read the analog value from the moisture sensor using `analogRead()`.
 
-COMPONENTS:
+**Step 5:** Display the measured moisture value on the Serial Monitor.
 
-Sl. No.	
-Quantity	
-Component
-1	1	Arduino Uno R3
-2	1	USB Cable
-3	3	Jumper Wire
-4	1	Soil moisture sensor
+**Step 6:** Compare the moisture value with the threshold value of `700`.
 
+**Step 7:** If the moisture value is **greater than 700**, display **"Dry Waste Detected"** on the Serial Monitor.
 
+**Step 8:** If the moisture value is **700 or less**, display **"Wet Waste Detected"**.
 
- 
+**Step 9:** Wait for 1 second and repeat the process continuously for real-time waste classification.
 
+### Program Flow
 
+```text
+                 START
+                   │
+                   ▼
+        Initialize Moisture Sensor
+                   │
+                   ▼
+        Set Sensor Pin A0 as INPUT
+                   │
+                   ▼
+       Start Serial Communication
+             at 9600 baud
+                   │
+                   ▼
+       Read Moisture Sensor Value
+                   │
+                   ▼
+       Display Moisture Value
+                   │
+                   ▼
+       Is Moisture Value > 700?
+             /             \
+           YES              NO
+            │                │
+            ▼                ▼
+      Dry Waste          Wet Waste
+       Detected            Detected
+            │                │
+            └───────┬────────┘
+                    ▼
+              Wait 1 Second
+                    │
+                    ▼
+              Repeat Forever
+                    ▲
+                    └────────
+```
 
-CIRCUIT CONNECTIONS:
+### Line-by-Line Explanation
 
-
-Soil Moisture Sensor	Arduino
-VCC	5V
-GND	GND
-A0	A0
- 
-
-SETUP:
-
-1.   Connect the soil moisture sensor to the Arduino Uno as per circuit connections.
-2.   Connect the Arduino Uno to the computer using a USB cable.
-3.   Open the Arduino IDE and navigate to:
-4.   Tools → Board → Arduino Uno
-5.   Tools → Port → Select the COM port corresponding to your Arduino device
-6.   Create a new sketch and type the provided moisture- based classification program.
-7.   Click Upload to transfer the program to the Arduino Uno board.
-8.   Open the Serial Monitor.
-9.   Insert the moisture sensor into different waste samples (dry paper, plastic, food waste, etc.).
-10. Observe the moisture value and classification message (Dry Waste or
-Wet Waste) displayed on the serial monitor.
-
-CODE:
-
+```cpp
 const int moisturePin = A0;
+```
+
+Defines analog pin **A0** as the pin connected to the moisture sensor.
+
+```cpp
 int moistureValue = 0;
+```
+
+Creates an integer variable to store the moisture sensor reading. Initially, its value is set to 0.
+
+```cpp
 const int threshold = 700;
+```
+
+Defines **700** as the threshold value used to classify the waste as dry or wet.
+
+```cpp
 void setup()
-{ Serial.begin(9600); pinMode(moisturePin, INPUT);
-}
+```
+
+The `setup()` function executes only once when the Arduino is powered ON or reset.
+
+```cpp
+Serial.begin(9600);
+```
+
+Starts serial communication between Arduino and the computer at a baud rate of **9600**.
+
+```cpp
+pinMode(moisturePin, INPUT);
+```
+
+Configures analog pin A0 as an input to receive the sensor signal.
+
+```cpp
 void loop()
-{
-moistureValue = analogRead(moisturePin); Serial.print("Moisture Value: "); Serial.println(moistureValue);
+```
+
+The `loop()` function executes repeatedly.
+
+```cpp
+moistureValue = analogRead(moisturePin);
+```
+
+Reads the analog signal from the moisture sensor and stores the value in `moistureValue`. Arduino UNO's `analogRead()` normally provides a value from **0 to 1023**.
+
+```cpp
+Serial.print("Moisture Value: ");
+Serial.println(moistureValue);
+```
+
+Displays the moisture sensor reading on the Serial Monitor.
+
+```cpp
 if (moistureValue > threshold)
-{
+```
+
+Checks whether the moisture value is greater than the threshold value of 700.
+
+```cpp
 Serial.println("Dry Waste Detected");
-}
+```
+
+If the condition is true, the program displays **Dry Waste Detected**.
+
+```cpp
 else
-{
+```
+
+If the moisture value is not greater than 700, the `else` block is executed.
+
+```cpp
 Serial.println("Wet Waste Detected");
-}
+```
+
+Displays **Wet Waste Detected** on the Serial Monitor.
+
+```cpp
 delay(1000);
-}
- 
+```
 
-RESULT:
+Pauses the program for **1000 milliseconds (1 second)** before taking the next reading.
 
+### Viva Questions
 
-The  soil  moisture  sensor  successfully  measured  the  moisture  level  of different  waste  samples.  Based  on  threshold  comparison,  the  system correctly classified waste as Dry or Wet, and the results were displayed on the Serial Monitor.
+**Q1. What is the purpose of this experiment?**
+**Answer:** To classify waste as dry or wet based on the moisture level detected by a moisture sensor.
+
+**Q2. Which sensor is used in this experiment?**
+**Answer:** A soil moisture sensor.
+
+**Q3. Which Arduino pin is connected to the sensor's analog output?**
+**Answer:** Analog pin **A0**.
+
+**Q4. What does `analogRead()` do?**
+**Answer:** It reads the analog voltage from an analog input pin and converts it into a digital value, normally from **0 to 1023** on Arduino UNO.
+
+**Q5. What is the purpose of the threshold value?**
+**Answer:** It provides a reference value for deciding whether the detected waste is classified as dry or wet.
+
+**Q6. What is the threshold value used in this program?**
+**Answer:** **700**.
+
+**Q7. What happens when `moistureValue > 700`?**
+**Answer:** The program displays **"Dry Waste Detected"**.
+
+**Q8. What happens when `moistureValue <= 700`?**
+**Answer:** The program displays **"Wet Waste Detected"**.
+
+**Q9. Why is `Serial.begin(9600)` used?**
+**Answer:** It establishes serial communication between the Arduino and computer at 9600 baud.
+
+**Q10. What is the purpose of `Serial.println()`?**
+**Answer:** It displays data or messages on the Serial Monitor and moves the cursor to the next line.
+
+**Q11. What is the range of `analogRead()` on Arduino UNO?**
+**Answer:** **0 to 1023**.
+
+**Q12. Why is `delay(1000)` used?**
+**Answer:** It creates a 1-second delay between consecutive sensor readings.
+
+**Q13. Can the threshold value be changed?**
+**Answer:** Yes. The threshold should be calibrated according to the sensor and the type of waste being tested.
+
+**Q14. Why can the threshold value differ between sensors?**
+**Answer:** Sensor readings can vary depending on the sensor type, material, moisture content, wiring, and environmental conditions.
+
+**Q15. What is the difference between `analogRead()` and `digitalRead()`?**
+**Answer:** `analogRead()` reads a range of analog values, while `digitalRead()` reads a digital state such as HIGH or LOW.
+
+**Q16. Why is A0 used instead of a digital pin?**
+**Answer:** The moisture sensor produces a variable analog output, so an analog input is used to measure different moisture levels.
+
+### Can We Change the Threshold Value?
+
+**Yes.** The threshold can be changed according to the sensor readings obtained during testing.
+
+For example, the current program uses:
+
+```cpp
+const int threshold = 700;
+```
+
+If calibration shows that **600** provides better classification for the particular sensor and waste samples, it can be changed to:
+
+```cpp
+const int threshold = 600;
+```
+
+The threshold should be determined experimentally by observing the sensor values for known **dry and wet samples** rather than assuming that one value will work for every sensor or waste material.
+
+### Expected Serial Monitor Output
+
+```text
+Moisture Value: 850
+Dry Waste Detected
+
+Moisture Value: 450
+Wet Waste Detected
+
+Moisture Value: 780
+Dry Waste Detected
+```
+
+### Important Note
+
+The classification depends on the **type and calibration of the moisture sensor**. The relationship between sensor value and moisture is not universal for every module. Therefore, students should first test known dry and wet samples and select an appropriate threshold for their particular sensor.
