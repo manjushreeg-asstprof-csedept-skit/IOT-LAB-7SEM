@@ -1,74 +1,193 @@
-Experiment 7: Develop a program to read the pH Value of a various substances like milk, lime and water.
+## Experiment 7: Develop a program to read the pH value of various substances such as milk, lime juice and water
 
-AIM: To develop an Arduino-based system to measure and display the pH
-value of various substances such as milk, lime, and water using a pH sensor.
+### Logic (Algorithm)
 
+**Step 1:** Define analog pin `A0` as the input pin connected to the pH sensor output.
 
+**Step 2:** Create variables to store the sensor voltage and calculated pH value.
 
-COMPONENTS:
+**Step 3:** In the `setup()` function, initialize serial communication at **9600 baud rate** and display a calibration message.
 
-Sl. No.	
-Quantity	
-Component
-1	1	Arduino Uno R3
-2	1	USB Cable
-3	3	Jumper Wire
-4	1	pH Sensor
+**Step 4:** Inside the `loop()` function, read the analog output of the pH sensor using `analogRead()`.
 
+**Step 5:** Convert the analog sensor reading into voltage using the Arduino UNO reference voltage of **5 V** and the ADC range of **0–1023**.
 
+**Step 6:** Calculate the pH value using the calibrated formula `pH = (-7.5 × voltage) + 17.5`.
 
-CIRCUIT CONNECTIONS:
+**Step 7:** Display both the measured voltage and calculated pH value on the Serial Monitor.
 
+**Step 8:** Wait for 1 second and repeat the process continuously.
 
+**Step 9:** Place the pH probe separately into milk, lime juice and water and observe the corresponding pH values.
 
-Ultrasonic Sensor	Arduino
-GND	GND
-V+	5V
-Po	Ao
+### Program Flow
 
+```text
+                    START
+                      │
+                      ▼
+             Define Sensor Pin A0
+                      │
+                      ▼
+          Initialize Serial Monitor
+               at 9600 Baud
+                      │
+                      ▼
+          Read pH Sensor Analog Value
+                      │
+                      ▼
+          Convert ADC Value to Voltage
+                      │
+                      ▼
+          Calculate pH Using Calibrated
+                  Formula
+                      │
+                      ▼
+          Display Voltage and pH Value
+                      │
+                      ▼
+               Wait 1 Second
+                      │
+                      ▼
+              Repeat Forever
+                      ▲
+                      └────────────
+```
 
+### PROGRAM-CODE
 
-SETUP:
+```cpp
+// Define the analog pin connected to the pH sensor
+#define SensorPin A0
 
-1.   Connect the pH sensor to the Arduino Uno as per the circuit connections given.
-2.   Connect the Arduino Uno to the computer using the USB cable.
-3.   Open the Arduino IDE on your computer.
-4.   Go to: Tools → Board → Arduino Uno.
-5.   Go to: Tools → Port → and select the COM port assigned to your
-Arduino.
-6.   Create a new sketch and type the pH measurement program provided.
-7.   Click Upload to upload the sketch to the Arduino board.
-8.   Open the Serial Monitor and set the baud rate to 9600.
-9.   Immerse the pH sensor probe into different substances such as milk,
-lime juice, and water one by one.
-10. Observe the  pH values displayed on the Serial Monitor.
- 
+// Declare variables for voltage and pH value
+float voltage, phValue;
 
-CODE:
+void setup()
+{
+    // Start serial communication at 9600 baud
+    Serial.begin(9600);
 
-#define SensorPin A0 float voltage, phValue;
-
-
-void setup() { Serial.begin(9600); Serial.println("Calibrating pH Sensor...");
+    // Display calibration message
+    Serial.println("Calibrating pH Sensor...");
 }
 
+void loop()
+{
+    // Read the analog value from the pH sensor
+    int sensorValue = analogRead(SensorPin);
 
-void loop() {
-int sensorValue = analogRead(SensorPin);
-voltage = sensorValue * (5.0 / 1023.0);  // convert to voltage
+    // Convert the ADC reading into voltage
+    voltage = sensorValue * (5.0 / 1023.0);
 
+    // Calculate pH using the calibrated formula
+    phValue = (-7.5 * voltage) + 17.5;
 
-// Use your calibrated formula phValue = (-7.5 * voltage) + 17.5;
+    // Display voltage and pH value on Serial Monitor
+    Serial.print("Voltage: ");
+    Serial.print(voltage);
 
+    Serial.print(" V | pH: ");
+    Serial.println(phValue);
 
-Serial.print("Voltage: "); Serial.print(voltage); Serial.print(" V | pH: "); Serial.println(phValue);
-
-delay(1000);
+    // Wait for 1 second before taking the next reading
+    delay(1000);
 }
+```
 
+### Line-by-Line Explanation
 
-RESULT:
+`#define SensorPin A0` defines analog pin **A0** as the input pin connected to the pH sensor.
 
+`float voltage, phValue;` creates floating-point variables to store the sensor voltage and calculated pH value.
 
-The  pH  measurement  system  was  successfully  implemented  using  the
-Arduino Uno and a pH sensor module.
+`Serial.begin(9600);` starts serial communication between the Arduino and computer at **9600 baud**.
+
+`Serial.println("Calibrating pH Sensor...");` displays a calibration message on the Serial Monitor.
+
+`int sensorValue = analogRead(SensorPin);` reads the analog output from the pH sensor. Arduino UNO provides an ADC value between **0 and 1023**.
+
+`voltage = sensorValue * (5.0 / 1023.0);` converts the ADC reading into voltage using the 5 V reference and 10-bit ADC resolution.
+
+`phValue = (-7.5 * voltage) + 17.5;` calculates the pH value using the calibrated equation provided in the program.
+
+`Serial.print()` and `Serial.println()` display the voltage and pH value on the Serial Monitor.
+
+`delay(1000);` pauses the program for **1 second** before taking the next reading.
+
+### Viva Questions
+
+**Q1. What is the purpose of this experiment?**
+**Answer:** To measure and display the pH value of different substances such as milk, lime juice and water using a pH sensor and Arduino UNO.
+
+**Q2. What is pH?**
+**Answer:** pH is a measure of how acidic or alkaline a substance is.
+
+**Q3. What is the pH range generally considered for aqueous solutions?**
+**Answer:** The commonly used scale is approximately **0 to 14**.
+
+**Q4. What does a pH value of 7 indicate?**
+**Answer:** It indicates a **neutral** substance.
+
+**Q5. What does a pH value below 7 indicate?**
+**Answer:** It indicates an **acidic** substance.
+
+**Q6. What does a pH value above 7 indicate?**
+**Answer:** It indicates an **alkaline/basic** substance.
+
+**Q7. Which Arduino pin is connected to the pH sensor output?**
+**Answer:** Analog pin **A0**.
+
+**Q8. Why is an analog pin used?**
+**Answer:** The pH sensor produces a variable analog voltage corresponding to the measured pH, so an analog input is used to measure it.
+
+**Q9. What is the purpose of `analogRead()`?**
+**Answer:** It reads the analog voltage from the sensor and converts it into a digital value from **0 to 1023** on the Arduino UNO.
+
+**Q10. Why is `5.0 / 1023.0` used in the voltage calculation?**
+**Answer:** Arduino UNO uses a 10-bit ADC, giving values from 0 to 1023, and with a 5 V reference, the ADC value is converted into the corresponding voltage.
+
+**Q11. What is the purpose of the pH formula?**
+**Answer:** It converts the measured sensor voltage into an estimated pH value based on the sensor's calibration.
+
+**Q12. Is the formula `phValue = (-7.5 * voltage) + 17.5` universal for all pH sensors?**
+**Answer:** No. The formula depends on the particular pH sensor module and its calibration. It should be replaced with the appropriate calibrated equation.
+
+**Q13. Why is calibration necessary for a pH sensor?**
+**Answer:** Calibration improves the accuracy of the pH measurement and compensates for differences in the sensor and its electronics.
+
+**Q14. What is the purpose of `Serial.begin(9600)`?**
+**Answer:** It establishes serial communication between the Arduino and computer at 9600 baud.
+
+**Q15. Why is `delay(1000)` used?**
+**Answer:** It creates a 1-second interval between consecutive pH readings.
+
+**Q16. What happens if the pH sensor is not calibrated properly?**
+**Answer:** The displayed pH value may be inaccurate.
+
+**Q17. Which substance is expected to be more acidic: water or lime juice?**
+**Answer:** Lime juice is generally more acidic and therefore has a lower pH than neutral water.
+
+**Q18. Why should the pH probe be cleaned between different samples?**
+**Answer:** To prevent contamination from one substance affecting the pH measurement of the next substance.
+
+### Can We Change the Sensor Pin?
+
+**Yes.** If the pH sensor output is connected to another analog pin, such as **A1**, change:
+
+```cpp
+#define SensorPin A0
+```
+
+to:
+
+```cpp
+#define SensorPin A1
+```
+
+Then connect the sensor's **Po/output pin to A1**.
+
+### Important Note
+
+The pH values obtained depend on the **specific pH sensor module, calibration, temperature, probe condition, and solution**. The formula used in this experiment is a **calibrated example** and should not be assumed to give accurate values for every pH sensor. For better accuracy, the sensor should be calibrated using suitable standard buffer solutions before measuring unknown substances.
+
